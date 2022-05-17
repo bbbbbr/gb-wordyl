@@ -25,8 +25,8 @@ compile.bat: Makefile
 	@echo "REM Automatically generated from Makefile" > compile.bat
 	@make -sn | sed y/\\//\\\\/ | grep -v make >> compile.bat
 
-tools/hash_generator: tools/hash_generator.c
-	$(CC) -O2 -o tools/hash_generator tools/hash_generator.c
+tools/hash_generator: tools/hash_generator.c bloom.c bloom.h
+	$(CC) -O2 -o tools/hash_generator tools/hash_generator.c bloom.c
 
 wordlist.bin: words.txt tools/gen-wordlist.py
 	@# This generates wordlist.bin and filter.h
@@ -42,5 +42,6 @@ $(BINS):	$(CSOURCES) $(ASMSOURCES) $(HSOURCES) wordlist.h filter.h
 	$(LCC) -v -o $@ $(CSOURCES) $(ASMSOURCES)
 
 clean:
-	rm -f *.o *.lst *.map *.gb *.ihx *.sym *.cdb *.adb *.asm
+	@rm -f *.o *.lst *.map *.gb *.ihx *.sym *.cdb *.adb *.asm wordlist.bin wordlist.h filter.h tools/hash_generator
+	@rm -rf *.dSYM tools/*.dSYM
 
