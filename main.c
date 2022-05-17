@@ -25,12 +25,12 @@ bloom_t bloom;
 const char *kb[3] = {
 "Q W E R T Y U I O P",
 " A S D F G H J K L",
-"  Z X C V B N M"};
+"  Z X C \x87 V B N M"};
 
 int kb_coords[3] = {
     10,
     9,
-    7
+    8
 };
 
 int kb_offsets[3] = {
@@ -209,9 +209,9 @@ void show_win() {
     box(0, 0, 160, 144, M_FILL);
     gotogxy(0, 8);
     color(WHITE, BLACK, M_NOFILL);
-    gprint("     You won!!!");
-    gotogxy(0, 9);
-    gprintf("   %d/6 - Congrats!", guess_nr);
+    gprint("   Has guanyat!");
+    gotogxy(0, 10);
+    gprintf("   %d/6 - Visca!", guess_nr);
     waitpad(J_START | J_A);
     reset();
 }
@@ -222,7 +222,7 @@ void show_loose() {
     box(0, 0, 160, 144, M_FILL);
     gotogxy(0, 8);
     color(WHITE, BLACK, M_NOFILL);
-    gprint(" You lost. Sorry!");
+    gprint("No hi ha hagut sort!");
     waitpad(J_START | J_A);
     reset();
 }
@@ -258,8 +258,8 @@ void run_wordle(void)
         draw_word_rect(40, 16+(i*16), NULL);
     }
 
-    gotogxy(2, 0);
-    gprint("GameBoy  WORDLE");
+    gotogxy(5, 0);
+    gprint("GB Vocable");
     draw_keyboard(0, kb_vert_offset);
 
     color(LTGREY, WHITE, M_NOFILL);
@@ -271,7 +271,7 @@ void run_wordle(void)
             seed |= (uint16_t)DIV_REG << 8;
             initrand(seed);
             int r = rand();
-            while(r > 211) {
+            while(r > WORDS_COUNT) {
                 r = rand();
             }
             strcpy(word, words[r]);

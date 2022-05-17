@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "bloom.h"
+#include <stdio.h>
 
 struct bloom_hash {
     hash_function func;

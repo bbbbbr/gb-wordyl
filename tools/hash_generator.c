@@ -5,21 +5,30 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "../bloom.h"
 
 int main(int argc, char *argv[]) {
     unsigned int bloom_size = 5000;
 	bloom_t bloom = bloom_create(bloom_size);
+    bloom_add_hash(bloom, djb2);
+
     FILE *f = fopen(argv[1], "r");
+
+    if (f == NULL) {
+        printf("Error opening file!\n");
+        exit(1);
+    }
+
     char wordbuf[6];
     wordbuf[5] = 0;
     int invalid = 0;
     while(1) {
-
         if(fread(wordbuf, 5, 1, f) != 1) {
             break;
         }
+
         int before = bloom_test(bloom, wordbuf);
         bloom_add(bloom, wordbuf);
         int after = bloom_test(bloom, wordbuf);

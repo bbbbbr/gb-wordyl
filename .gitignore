@@ -1,0 +1,7 @@
+wordlist.bin
+filter.h
+wordlist.h
+tools/hash_generator
+tools/hash_generator.dSYM
+
+.vscode
