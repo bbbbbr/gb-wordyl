@@ -1,0 +1,14 @@
+
+
+../../tools/png2asset sgb_border_optimized.png -map -bpp 4 -max_palettes 4 -pack_mode sgb -use_map_attributes -c sgb_border_data_optimized.c
+
+
+- split tile, map, palette arrays into separate source files
+
+     ../../tools/gbcompress --varname=sgb_border_tiles -v  --cin --cout sgb_border_tiles_opt.c.uncomp ../../src/sgb_border_tiles.gbcomp.c
+			Compressed: 2656 bytes -> 1031 bytes (%38.82)
+
+    ../../tools/gbcompress --varname=sgb_border_map -v  --cin --cout sgb_border_map_opt.c.uncomp ../../src/sgb_border_map.gbcomp.c
+			Compressed: 1792 bytes -> 365 bytes (%20.37)
+
+

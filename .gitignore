@@ -1,8 +1,8 @@
-wordlist.bin
-filter.h
-wordlist.h
-tools/hash_generator
-tools/hash_generator.dSYM
 *.gb
+*.pocket
+*.cdb
+*.map
+*.noi
+build
+obj
 
-.vscode

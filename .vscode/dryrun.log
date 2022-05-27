@@ -1,0 +1,9 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/user/projects/gb-vocable'
+# This generates words-ccedille-fix.txt and filter.h
+python3 tools/gen-wordlist.py words.txt
+gcc -O2 -o tools/hash_generator tools/hash_generator.c bloom.c
+./tools/hash_generator words-ccedille-fix.txt > filter.h
+gbdk/bin/lcc -v -o WORDLE.gb main.c bloom.c 
+make: Leaving directory `/Users/user/projects/gb-vocable'
+ 
