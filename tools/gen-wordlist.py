@@ -14,15 +14,15 @@ with open(sys.argv[1], "rb") as f:
         word = word.replace(ccedile, b"\x87")
         words.append(word)
 
-sample = sorted(random.sample(words, WORD_COUNT))
-
 # 1. Generate wordlist.bin
 
 with open("wordlist.bin", "wb") as f:
-    for word in sample:
+    for word in words:
         f.write(word + b"\n")
 
 # 2. Generate wordlist.h
+
+sample = sorted(random.sample(words, WORD_COUNT))
 
 with open("wordlist.h", "w") as f:
     f.write("#define WORDS_COUNT {}\n".format(len(sample)))

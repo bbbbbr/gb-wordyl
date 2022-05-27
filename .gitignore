@@ -3,5 +3,6 @@ filter.h
 wordlist.h
 tools/hash_generator
 tools/hash_generator.dSYM
+*.gb
 
 .vscode
