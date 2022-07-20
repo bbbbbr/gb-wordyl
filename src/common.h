@@ -121,7 +121,7 @@ typedef struct settings_rec {
     bool opt_autofill_enabled;
     bool opt_sound_fx_enabled;
     bool opt_skip_autofilled;
-    bool intro_message_displayed;
+    bool opt_help_message_on_startup;
         // Not implemented, set to zero on first run
         uint8_t opt_blank_1;
         uint8_t opt_blank_2;

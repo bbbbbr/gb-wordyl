@@ -33,24 +33,6 @@
 #define GAMEPLAY_SET_GAMEOVER  game_state = GAME_STATE_OVER
 
 
-// Note: This needs to get called AFTER the flag has been
-//       loaded by settings_load() (in main())
-//
-// Show the intro message if needed
-void show_intro_message(void) {
-
-    if (game_settings.intro_message_displayed == false) {
-        help_info_show();
-        game_settings.intro_message_displayed = true;
-
-        // For relevant carts, save the setting so it doesn't
-        // display on startup again
-        #if defined(CART_31k_1kflash) || defined(CART_mbc5)
-            cartsave_save_data();
-        #endif
-    }
-}
-
 // Should not be const, gets modified
 uint8_t game_won_str[] = __MESSAGE_GAME_WON_STR;
 

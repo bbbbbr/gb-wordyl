@@ -13,7 +13,6 @@
 
 void gameplay_init_answer_word(void);
 
-void show_intro_message(void);
 void show_win_message(uint8_t guess_count);
 void show_lose_message(char *correct_word);
 

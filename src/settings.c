@@ -21,7 +21,7 @@ void options_reset() {
     game_settings.opt_autofill_enabled = false;
     game_settings.opt_sound_fx_enabled = true;
     game_settings.opt_skip_autofilled = false;
-    game_settings.intro_message_displayed = false;
+    game_settings.opt_help_message_on_startup = true;
         // Not implemented
         game_settings.opt_blank_1 = 0x00;
         game_settings.opt_blank_2 = 0x00;

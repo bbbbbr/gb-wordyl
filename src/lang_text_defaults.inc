@@ -47,7 +47,7 @@
 
 
 #define HELP_LEGEND_MAP_Y (2u)     // Start Win Y for color key board letters
-#define HELP_LEGEND_MAP_Y_GAP (0u) // Gap between color key board letters in case more space is needed        
+#define HELP_LEGEND_MAP_Y_GAP (0u) // Gap between color key board letters in case more space is needed
 #define HELP_LEGEND_DIALOG_WIN_Y  DIALOG_TEXT_HEIGHT_LINES(7)
 #define __HELP_LEGEND_DIALOG_STR \
 /*  |----------------XX| Available space (16 chars wide, 2 reserved for letter legend tiles) */\
@@ -63,7 +63,7 @@
 // "^" char gets replaced with a UI checkboxes reflecting option on/off state
 // Leading space on each line is room for Cursor
 // MAX Height is 16
-#define OPTIONS_MENU_DIALOG_WIN_Y  DIALOG_TEXT_HEIGHT_LINES(14)
+#define OPTIONS_MENU_DIALOG_WIN_Y  DIALOG_TEXT_HEIGHT_LINES(15)
 #define __OPTIONS_MENU_STR \
 /*  |------------------| Available space (18 chars wide) */\
     " ... OPTIONS ...\n" \
@@ -74,6 +74,7 @@
     " AUTO FILL  .... ^\n" \
     " SKIP AUTOFILLED ^\n" \
     " SOUND FX  ..... ^\n" \
+    " HELP ON STARTUP ^\n" \
     "\n" \
     " SHOW STATS\n" \
     " FORFEIT ROUND\n" \
@@ -95,12 +96,13 @@
 #define MENU_Y_AUTO_FILL     5
 #define MENU_Y_SKIP_FILLED   6
 #define MENU_Y_SOUND_FX      7
-// space                     8
-#define MENU_Y_SHOW_STATS    9
-#define MENU_Y_FORFEIT_ROUND 10
-#define MENU_Y_RESET_STATS   11
-// space                     12
-#define MENU_Y_HELP          13
+#define MENU_Y_STARTUP_HELP  8
+// space                     9
+#define MENU_Y_SHOW_STATS    10
+#define MENU_Y_FORFEIT_ROUND 11
+#define MENU_Y_RESET_STATS   12
+// space                     13
+#define MENU_Y_HELP          14
 
 
 

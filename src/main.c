@@ -25,6 +25,8 @@
 
 #include "decode.h"
 
+#include "help_info.h"
+
 #include "intro_splash.h"
 #include "board.h"
 #include "gameplay.h"
@@ -109,7 +111,13 @@ void main() {
                     // Call this before show_intro_message(), it uses a loaded flag
                     settings_load();
 
-                    show_intro_message();
+                    // Note: This needs to get called AFTER the flag has been
+                    //       loaded by settings_load() (in main())
+                    if (game_settings.opt_help_message_on_startup)
+                        help_info_show();
+                    else
+                        stats_show();
+
                     is_first_run = false;
                     // Second half of random init (after button press to exit welcome dialog)
                     rand_seed.l = DIV_REG;

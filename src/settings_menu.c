@@ -32,6 +32,7 @@ const uint8_t menu_cursor_y_ids[] = {
     MENU_Y_AUTO_FILL,
     MENU_Y_SKIP_FILLED,
     MENU_Y_SOUND_FX,
+    MENU_Y_STARTUP_HELP,
     MENU_Y_SHOW_STATS,
     MENU_Y_FORFEIT_ROUND,
     MENU_Y_RESET_STATS,
@@ -45,6 +46,7 @@ const void (*menu_funcs[])(void) = {
     NULL, // opt_autofill_enabled
     NULL, // opt_skip_autofilled
     NULL, // opt_sound_fx_enabled
+    NULL, // opt_help_message_on_startup
     &stats_show,
     &ask_forfeit_round,
     &ask_stats_reset,
@@ -58,6 +60,7 @@ uint8_t * const p_menu_vars[] = {
     &game_settings.opt_autofill_enabled,
     &game_settings.opt_skip_autofilled,
     &game_settings.opt_sound_fx_enabled,
+    &game_settings.opt_help_message_on_startup,
     NULL, // Show Stats
     NULL, // Skip Auto-filled
     NULL, // Reset Stats
@@ -197,6 +200,7 @@ static void settings_menu_render_text(void) {
     str_bool_checkbox_at_X(menu_str, game_settings.opt_autofill_enabled);
     str_bool_checkbox_at_X(menu_str, game_settings.opt_skip_autofilled);
     str_bool_checkbox_at_X(menu_str, game_settings.opt_sound_fx_enabled);
+    str_bool_checkbox_at_X(menu_str, game_settings.opt_help_message_on_startup);
     // str_bool_checkbox_at_X(menu_str, game_settings.opt_tile_flip_enabled);
 }
 
