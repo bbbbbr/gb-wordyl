@@ -9,8 +9,8 @@
 
 // == #define overrides for language strings go here
 
-// Catalan: Not yet translated
-
+// Catalan translation credits: see ALVARO.CAT & URIXTURING
+//
 // Use '[' for 'Ç'
 
 #undef INTRO_DIALOG_WIN_Y
@@ -75,11 +75,11 @@
     "\n" \
     " SURT DEL MENU\n" \
     "\n" \
-    " MODE DIFICIL .. ^\n" \
-    " AUTOEMPLENAT  . ^\n" \
-    " SALTA EMPLENATS ^\n" \
-    " EFECTES DE SO . ^\n" \
-    " INFO AL PRINCIPI^\n" \
+    " MODE DIFICIL ...^\n" \
+    " AUTOEMPLENAT ...^\n" \
+    " SALTA EMPLENATS.^\n" \
+    " EFECTES DE SO ..^\n" \
+    " INFO A L'INICI..^\n" \
     "\n" \
     " ESTADISTIQUES\n" \
     " RENDIR-SE\n" \
