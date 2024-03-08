@@ -1,8 +1,8 @@
 # gb-wordyl
 
-A Wordle clone for the Nintendo Game Boy / Color, Analogue Pocket and MegaDuck Handheld and Laptops!
+A word game for the Nintendo Game Boy / Color, Analogue Pocket and MegaDuck Handheld and Laptops!
 
-This is a re-written and greatly expanded fork (by [bbbbbr](https://github.com/bbbbbr/gb-wordle)) of the original version by [stacksmashing](https://github.com/stacksmashing/gb-wordle) ([twitter](http://twitter.com/ghidraninja)).
+This is a re-written and greatly expanded fork (by [bbbbbr](https://github.com/bbbbbr/gb-wordyl)) of the original version by [stacksmashing](https://github.com/stacksmashing/gb-wordle) ([twitter](http://twitter.com/ghidraninja)).
 
 It adds a full dictionary (versus the bloom filter), thousands more solution words, multiple dictionary languages, Game Boy Color support, and many other features.
 
@@ -25,12 +25,12 @@ Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
 ### Special MegaDuck Features
   - Physical Keyboard support for the CEFA Super QuiQue and Hartung Super Junior Computer models
 
-### Wordle Features
+### Features
   - Game stats: Won, Lost, Streak & Win Percentage
   - Hard mode
   - Auto-fill letters of previous exact matches
   - Skip Auto-filled letters for faster letter entry
-  - Full official English answer word list and dictionary less a couple cringy words (~12,900 words)
+  - Full English answer word list and dictionary less a couple cringy words (~12,900 words)
   - Super Game Boy Border
   - All in a 32K ROM
   - Multiple language dictionaries (different ROM for each)
@@ -67,7 +67,7 @@ Language / UI Translation credits:
     - [@urixturing](https://twitter.com/urixturing)
     - [@alvaromartinezmajado](https://github.com/alvaromartinezmajado)
     - Their web version is at: https://factorialunar.github.io/vocable/
-    - For this repo see the [lang_catalan branch](https://github.com/bbbbbr/gb-wordle/tree/feature/lang_catalan)
+    - For this repo see the [lang_catalan branch](https://github.com/bbbbbr/gb-wordyl/tree/feature/lang_catalan)
 
 Additional code and contributions from:
   - Eucal.BB : Help with Megaduck Laptop testing and research
