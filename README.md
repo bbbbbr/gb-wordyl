@@ -2,7 +2,7 @@
 
 A word game for the Nintendo Game Boy / Color, Analogue Pocket and MegaDuck Handheld and Laptops!
 
-This is a re-written and greatly expanded fork (by [bbbbbr](https://github.com/bbbbbr/gb-wordyl)) of the original version by [stacksmashing](https://github.com/stacksmashing/gb-wordle) ([twitter](http://twitter.com/ghidraninja)).
+This is a re-written and greatly expanded fork (by [bbbbbr](https://github.com/bbbbbr/gb-wordyl)) of the original version by [stacksmashing](https://github.com/stacksmashing) ([twitter](http://twitter.com/ghidraninja)).
 
 It adds a full dictionary (versus the bloom filter), thousands more solution words, multiple dictionary languages, Game Boy Color support, and many other features.
 
@@ -75,8 +75,8 @@ Additional code and contributions from:
   - [Coffee "Valen" Bat](https://twitter.com/cofebbat) : Game Sound FX and [CBTFX Driver](https://github.com/datguywitha3ds/CBT-FX)
   - [toxa](https://github.com/untoxa/) : Ferrante Crafts 31k ROM + 1k Flash cart support
   - [arpruss](https://github.com/arpruss/gb-fiver) : Highlighting fixes, Improved Dictionary compression and lookup speed
-  - [zeta_two](https://github.com/ZetaTwo/gb-wordle) : Previous dictionary compression
-  - [stacksmashing](https://github.com/stacksmashing/gb-wordle) : original base code (mostly now rewritten)
+  - [zeta_two](https://github.com/ZetaTwo/) : Previous dictionary compression
+  - [stacksmashing](https://github.com/stacksmashing/) : original base code (mostly now rewritten)
 
 Built using [GBDK-2020](https://github.com/gbdk-2020/gbdk-2020) (4.2.0)
 
