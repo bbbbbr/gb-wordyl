@@ -32,4 +32,4 @@ Guess the hidden word within 6 tries. Each guess will reveal clues about whether
 
 ### Source
 GB-Wordyl is open source and licensed under the GPL-3.0 license.
-Source can be obtained at: https://github.com/bbbbbr/gb-wordle
+Source can be obtained at: https://github.com/bbbbbr/gb-wordyl
