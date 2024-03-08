@@ -1,7 +1,7 @@
 
 # GB-Wordyl
 
-A Wordle clone for the Nintendo Game Boy / Color and Analogue Pocket!
+A word game for the Nintendo Game Boy / Color and Analogue Pocket!
 
 
 ### Gameplay Objective
