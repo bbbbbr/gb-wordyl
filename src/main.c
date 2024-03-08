@@ -1,4 +1,4 @@
-/* Wordle clone for Game Boy.
+/* Word game for Game Boy.
  * A weekend project by stacksmashing.
  * Contact: twitter.com/ghidraninja
  *          code@stacksmashing.net
