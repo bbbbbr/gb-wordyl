@@ -20,7 +20,7 @@ Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
 
 - [User's Manual](Manual.md)
 
-![GB-Wordyl gameplay](/info/gb-wordyl_demo_cgb.gif)
+![GB-Wordyl gameplay](/info/gb-wordyl-intro-cgb.gif)
 
 ### Special MegaDuck Features
   - Physical Keyboard support for the CEFA Super QuiQue and Hartung Super Junior Computer models
@@ -80,7 +80,7 @@ Additional code and contributions from:
 
 Built using [GBDK-2020](https://github.com/gbdk-2020/gbdk-2020) (4.2.0)
 
-![GB-Wordyl gameplay](/info/gb-wordyl_demo.gif)
+![GB-Wordyl gameplay](/info/gb-wordyl-intro-dmg.gif)
 
 
 ### Building from source:
