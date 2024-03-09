@@ -16,7 +16,8 @@ const palette_color_t cgb_palettes[] = {
                                 // so that it shows up ok on unmodded CGB hardware when used
                                 // to show not-matched-letter tiles
                                RGB8(255u,255u,255u), RGB8(125u,125u,125u),           RGB8(85u,85u,85u),RGB8(0u,0u,0u),
-                               RGB8(255u,243u, 86u), RGB8(255u /2, 243u /2, 86u  /2),RGB8(85u,85u,85u),RGB8(0u,0u,0u), // col 0 = yellow
+                               // RGB8(255u,243u, 86u), RGB8(255u /2, 243u /2, 86u  /2),RGB8(85u,85u,85u),RGB8(0u,0u,0u), // col 0 = yellow
+                               RGB8(255u,120u, 90u), RGB8(255u /2, 120u /2, 90u  /2),RGB8(85u,85u,85u),RGB8(0u,0u,0u), // col 0 = orqnge
                                RGB8(130u,255u,130u), RGB8(130u /2, 255u /2, 130u /2),RGB8(85u,85u,85u),RGB8(0u,0u,0u), // col 0 = green
                                RGB8(168u,210u,255u), RGB8(168u /2, 240u /2, 255u /2),RGB8(85u,85u,85u),RGB8(0u,0u,0u), // col 0 = blue
                                //RGB8(255u,150u,150u), RGB8(255u /2, 150u /2, 150u /2),RGB8(85u,85u,85u),RGB8(0u,0u,0u),        // Pink BG  / Black Text

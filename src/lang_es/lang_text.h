@@ -187,7 +187,7 @@
 /*  |------------------| Available space (18 chars wide) */\
     "GANAS!\n" \
     "\n" \
-    "INTENTO ^ DE 6"
+    "INTENTO ^ DE 5" //
 
 
 // Avoid increasing this popup height so it doesn't obscure the board

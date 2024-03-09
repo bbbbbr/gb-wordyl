@@ -183,7 +183,7 @@
 /*  |------------------| Available space (18 chars wide) */\
     "JE HEBT GEWONNEN! \n" \
     "\n" \
-    "GOK ^ VAN 6"
+    "GOK ^ VAN 5" //
 
 
 #undef __MESSAGE_WORD_TOO_SHORT_STR

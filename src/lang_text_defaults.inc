@@ -196,7 +196,7 @@
 /*  |------------------| Available space (18 chars wide) */\
     "You won!\n" \
     "\n" \
-    "On Guess ^ of 6"
+    "On Guess ^ of 5" // 6"
 
 
 // Avoid increasing this popup height so it doesn't obscure the board

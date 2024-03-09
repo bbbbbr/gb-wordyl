@@ -190,7 +190,7 @@
 /*  |------------------| Available space (18 chars wide) */\
     "DU HAST GEWONNEN!\n" \
     "\n" \
-    "VERSUCH ^ von 6"
+    "VERSUCH ^ von 5" // 6"
 
 
 #undef __MESSAGE_WORD_TOO_SHORT_STR

@@ -187,7 +187,7 @@
 /*  |------------------| Available space (18 chars wide) */\
     "Acertou!\n" \
     "\n" \
-    "Tentativa ^ DE 6"
+    "Tentativa ^ DE 5" //
 
 
 // Avoid increasing this popup height so it doesn't obscure the board

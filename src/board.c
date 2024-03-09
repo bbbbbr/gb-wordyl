@@ -60,7 +60,7 @@ const uint8_t board_row_ranges_game[] =
    BRD_ROW(2u, 0u, BOARD_GRID_W),
    BRD_ROW(3u, 0u, BOARD_GRID_W),
    BRD_ROW(4u, 0u, BOARD_GRID_W),
-   BRD_ROW(5u, 0u, BOARD_GRID_W),
+//   BRD_ROW(5u, 0u, BOARD_GRID_W),
    BRD_CRD_STOP};
 
 // This makes an irregular grid for the intro splash screen
