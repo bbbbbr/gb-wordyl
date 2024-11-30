@@ -12,10 +12,7 @@
 // French: Translation by Cizia
 
 
-// French Keyboard Map Layout
-#define KEYBD_ROW_1 "AZERTYUIOP"
-#define KEYBD_ROW_2  "QSDFGHJKLM"
-#define KEYBD_ROW_3   "WXCVBN"
+
 
 
 #undef INTRO_DIALOG_WIN_Y
@@ -28,7 +25,7 @@
     " PAS DE CAR. SPEC.\n" \
     "\n" \
     "AFFICHER MENU:\n" \
-    " SELECT x 3\n" \
+    "  SELECT x 3\n" \
     "\n" \
     "DEPLACER CURSEUR:\n" \
     "  SELECT + B A\n" \
@@ -66,11 +63,12 @@
 /*  |----------------XX| Available space (16 chars wide, 2 reserved for letter legend tiles) */\
     "CODE COULEUR:\n" \
     "\n" \
-    "INCORRECTE ....." \
-    "\n" \
+    "INCORRECTE .....\n" \
+    "\n\n" \
     "MAUVAISE PLACE..\n" \
-    "\n" \
+    "\n\n" \
     "CORRECTE ......."
+
 
 
 #undef MENU_Y_EXIT
@@ -91,22 +89,24 @@
 #undef __OPTIONS_MENU_STR
 #define __OPTIONS_MENU_STR \
 /*  |------------------| Available space (18 chars wide) */\
-    " ... OPTIONS ...\n" \
-    "\n" \
-    " QUITTER LE MENU\n" \
-    "\n" \
-    " MODE DIFFICILE..^\n" \
-    " REMPLISSAGE AUTO^\n" \
-    " SAUTER REMP AUTO^\n" \
-    " SON ............^\n" \
-    " INFOS AU DEBUT..^\n" \
-    "\n" \
-    " VOIR STATS\n" \
-    " ABANDONNER\n" \
-    " EFFACER STATS\n" \
-    "\n" \
-    " AIDE"
- " HELP ON STARTUP ^\n" \
+" ... OPTIONS ...\n" \
+"\n" \
+" QUITTER LE MENU\n" \
+"\n" \
+" MODE DIFFICILE..^\n" \
+" REMPL. AUTO.....^\n" \
+" PASSER LE\n" \
+"   REMPL. AUTO...^\n" \
+" SON ............^\n" \
+" INFOS AU DEBUT..^\n" \
+"\n" \
+" VOIR STATS\n" \
+" ABANDONNER PARTIE\n" \
+" EFFACER STATS\n" \
+"\n" \
+" AIDE"
+
+
 // "SKIP FILLED" is ok for "SKIP AUTOFILLED"
 
 // These need to exactly match the menu order & formating above
@@ -192,7 +192,7 @@
 /*  |------------------| Available space (18 chars wide) */\
     "GAGNE!\n" \
     "\n" \
-    "AU ^ ESSAI SUR 5" //
+    "ESSAIS: ^ SUR 5" //
 
 
 // Avoid increasing this popup height so it doesn't obscure the board
@@ -222,12 +222,12 @@
 #undef __STATS_TEMPLATE_STR
 #define __STATS_TEMPLATE_STR \
 /*  |------------------| Available space (18 chars wide) */\
-    " Jeux ...... ____^\n" \
-    " Série ..... ____^\n" \
-    " Gagnes .... ____^\n" \
-    " Perdus .... ____^\n" \
+    " PARTIES ... ____^\n" \
+    " SERIES .... ____^\n" \
+    " GAGNEES ... ____^\n" \
+    " PERDUES ... ____^\n" \
     "\n" \
-    "Nombre d'éssais\n" \
+    "Nombre d'essais\n" \
     " Minimum ... ____^\n" \
     " Maximum ... ____^\n" \
     " Moyenne.... ____^\n"   // <-- All "____^" get replaced by numbers
@@ -235,7 +235,7 @@
 // Should be no more than 18 chars
 #undef __INTRO_PRESS_START_STR
 #undef __INTRO_PRESS_START_STR_BLANK
-#define __INTRO_PRESS_START_STR       "APPUYEZ SUR START"
+#define __INTRO_PRESS_START_STR       "PRESS START"
 #define __INTRO_PRESS_START_STR_BLANK "           "
 
 // X, Y controls upper-left corner coordinates
