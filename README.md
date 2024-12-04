@@ -36,7 +36,7 @@ Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
   - Multiple language dictionaries (different ROM for each)
     - Deutsch (DE), English (EN), Español (ES), Français (FR), Italiano (IT), Nederlands (NL), Latin (LA), Português Brasileiro (PT-BR), Cornish (KW), català (CA)
     - No words with special chars, just English A-Z letters
-    - Translated UI text for Deutsch (DE), English (EN), Español (ES), Nederlands (NL), Português Brasileiro (PT-BR), Cornish (KW), català (CA)
+    - Translated UI text for Deutsch (DE), English (EN), Español (ES), Français (FR), Nederlands (NL), Português Brasileiro (PT-BR), Cornish (KW), català (CA)
 
 ### Controls:
   - A: Add Letter
@@ -52,10 +52,11 @@ Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
 ### Credits, Contributors and Thanks
 
 Language / UI Translation credits:
-  - German: Skite2001 - https://twitter.com/skite2001
-  - Dutch: Ferrante Crafts - https://ferrantecrafts.com
-  - Spanish: Adamantibus
   - Brazilian Portuguese: Bruno Maestrini & Daniel Tolentino - https://github.com/DanielTolentino
+  - Fench: Cizia - https://github.com/cizia64
+  - Dutch: Ferrante Crafts - https://ferrantecrafts.com
+  - German: Skite2001 - https://twitter.com/skite2001
+  - Spanish: Adamantibus
   - Cornish:
     - SJD (https://sjd-sjd.itch.io/)
     - Niwlen Ster
