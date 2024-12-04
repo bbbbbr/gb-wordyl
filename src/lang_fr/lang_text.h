@@ -45,7 +45,7 @@
     "REMPLISSAGE AUTO:\n" \
     "  ESC.QUITTER\n" \
     "\n" \
-    "APPUYER SUR UNE TOUCHE"
+    "PRESSEZ UN TOUCHE"
 
 
 // #undef HELP_LEGEND_MAP_Y
@@ -85,22 +85,22 @@
 #undef __OPTIONS_MENU_STR
 #define __OPTIONS_MENU_STR \
 /*  |------------------| Available space (18 chars wide) */\
-" ... OPTIONS ...\n" \
-"\n" \
-" QUITTER LE MENU\n" \
-"\n" \
-" MODE DIFFICILE..^\n" \
-" REMPL. AUTO.....^\n" \
-" PASSER LE\n" \
-"   REMPL. AUTO...^\n" \
-" SON ............^\n" \
-" INFOS AU DEBUT..^\n" \
-"\n" \
-" VOIR STATS\n" \
-" ABANDONNER PARTIE\n" \
-" EFFACER STATS\n" \
-"\n" \
-" AIDE"
+    " ... OPTIONS ...\n" \
+    "\n" \
+    " QUITTER LE MENU\n" \
+    "\n" \
+    " MODE DIFFICILE..^\n" \
+    " REMPL. AUTO.....^\n" \
+    " PASSER LE\n" \
+    "   REMPL. AUTO...^\n" \
+    " SON ............^\n" \
+    " INFOS AU DEBUT..^\n" \
+    "\n" \
+    " VOIR STATS\n" \
+    " ABANDONNER PARTIE\n" \
+    " EFFACER STATS\n" \
+    "\n" \
+    " AIDE"
 
 
 // "SKIP FILLED" is ok for "SKIP AUTOFILLED"
@@ -138,8 +138,11 @@
 #define __CONFIRM_FORFEIT_STR     "ABANDONNER?"
 
 #undef __CONFIRM_STATS_RESET_STR
-#define __CONFIRM_STATS_RESET_STR "REINITIALISER STATS?"
-
+// Too Long, overflows dialog box
+// #define __CONFIRM_STATS_RESET_STR "REINITIALISER STATS?"
+#define __CONFIRM_STATS_RESET_STR \
+/*  |------------------| Available space (18 chars wide) */ \
+    "EFFACER LES STATS?"
 
 // Display hard mode indicator at top of screen
 #undef OPT_HARDMODE_DISPLAY_X
