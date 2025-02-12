@@ -43,6 +43,9 @@ compress-all-langs:
 	python3 compress5.py kw
 	$(GBCOMPRESS_RLE) ../src/lang_kw/answerbitmap.c.nocomp ../src/lang_kw/answerbitmap_rle.c
 
+	python3 compress5.py hu
+	$(GBCOMPRESS_RLE) ../src/lang_hu/answerbitmap.c.nocomp ../src/lang_hu/answerbitmap_rle.c
+
 #	python3 compress5.py pt
 #	$(GBCOMPRESS_RLE) ../src/lang_pt/answerbitmap.c.nocomp ../src/lang_pt/answerbitmap_rle.c
 
