@@ -44,6 +44,9 @@
 
 #if defined(CART_31k_1kflash)
     #include "cart_31k_1kflash/logo_splash_ferrante_skullcat.h"
+#elif defined(CART_md0_sram)
+    volatile uint8_t __at (0x1000) rMD0_BANK_REG;
+    #define SWITCH_BANKS_ROM_RAM_MD0(ROMB, RAMB) (rMD0_BANK_REG = (RAMB << 4) | ROMB)
 #endif
 
 bool is_first_run = true;
@@ -59,6 +62,10 @@ void main(void) {
         SWITCH_ROM_MBC5(1);
         SWITCH_RAM(0);
         DISABLE_RAM_MBC5;
+    #elif defined(CART_md0_sram)
+        // Make sure MD0 ROM and SRAM banks are both set to 0, only those are used
+        // There is no (known) enable/disable for the SRAM, it's just always on
+        SWITCH_BANKS_ROM_RAM_MD0(0,0);
     #endif
 
     #if defined(GAMEBOY) || defined(ANALOGUEPOCKET)

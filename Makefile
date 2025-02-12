@@ -10,19 +10,21 @@ VERSION=1.0.6
 # Alternate languages can be passed in as follows
 # de en es fr it nl pt-br
 # make LANG_CODE=<lang code>
+#
+# Set default language
 ifndef LANG_CODE
 	LANG_CODE=en
 endif
 
-# Alternate languages can be passed in as follows
-# - 32k_nosave
-# - 31k_1kflash
-# - mbc5
+# Cart types can be passed in as follows
 # make CART_TYPE=<cart type>
+#
+# Set default type:
 ifndef CART_TYPE
 #	CART_TYPE=32k_nosave
 	CART_TYPE=mbc5
 #	CART_TYPE=31k_1kflash
+#	CART_TYPE=md0_sram
 endif
 
 CFLAGS += -DLANG_CODE=$(LANG_CODE)
@@ -61,6 +63,11 @@ endif
 # Generic 32 Cart with no save support
 ifeq ($(CART_TYPE),32k_nosave)
 	TARGETS=gb pocket megaduck
+endif
+
+# MD0 cart with SRAM (aka, picoDuck flashcart or Duck Laptop with Memory card
+ifeq ($(CART_TYPE),md0_sram)
+	TARGETS=megaduck
 endif
 
 
@@ -117,7 +124,7 @@ MEGADUCK_LAPTOP = $(SRCDIR)/megaduck_laptop
 OBJDIR      = obj/$(EXT)/$(CART_TYPE)_$(LANG_CODE)
 
 RESDIR      = res
-BINDIR      = build/$(EXT)
+BINDIR      = build/$(EXT)/$(CART_TYPE)
 MKDIRS      = $(OBJDIR) $(BINDIR) # See bottom of Makefile for directory auto-creation
 
 BINS	      = $(OBJDIR)/$(PROJECTNAME).$(EXT)
@@ -239,12 +246,14 @@ carts:
 	${MAKE} CART_TYPE=31k_1kflash langs
 	${MAKE} CART_TYPE=mbc5 langs
 	${MAKE} CART_TYPE=32k_nosave langs
+	${MAKE} CART_TYPE=md0_sram langs
 
 
 carts-clean:
 	${MAKE} CART_TYPE=31k_1kflash langs-clean
 	${MAKE} CART_TYPE=mbc5 langs-clean
 	${MAKE} CART_TYPE=32k_nosave langs-clean
+	${MAKE} CART_TYPE=md0_sram langs-clean
 
 
 dictionaries: langs-compress
@@ -260,13 +269,16 @@ romusage:
 
 package:
 	mkdir -p "../Build Archive/$(VERSION)"
-	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_32k_nosave.zip"       Manual.md README.md build/duck/*32k_nosave*.duck
-	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_31k_1kflash.zip"      Manual.md README.md build/duck/*31k_1kflash*.duck
-	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_32k_nosave.zip"        Manual.md README.md build/gb/*32k_nosave*.gb
-	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_31k_1kflash.zip"       Manual.md README.md build/gb/*31k_1kflash*.gb
-	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_mbc5.zip"              Manual.md README.md build/gb/*mbc5*.gb
-	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_AnaloguePocket_32k_nosave.zip" Manual.md README.md build/pocket/*32k_nosave*.pocket
-	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_AnaloguePocket_mbc5.zip"       Manual.md README.md build/pocket/*mbc5*.pocket
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_32k_nosave.zip"       Manual.md README.md build/duck/32k_nosave/*.duck
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_31k_1kflash.zip"      Manual.md README.md build/duck/31k_1kflash/*.duck
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_md0_sram.zip"         Manual.md README.md build/duck/md0_sram/*.duck
+	#
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_32k_nosave.zip"        Manual.md README.md build/gb/32k_nosave/*.gb
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_31k_1kflash.zip"       Manual.md README.md build/gb/31k_1kflash/*.gb
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_mbc5.zip"              Manual.md README.md build/gb/mbc5/*.gb
+	#
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_AnaloguePocket_32k_nosave.zip" Manual.md README.md build/pocket/32k_nosave/*.pocket
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_AnaloguePocket_mbc5.zip"       Manual.md README.md build/pocket/mbc5/*.pocket
 
 clean:
 	@echo Cleaning

@@ -151,7 +151,7 @@ void settings_menu_show(void) {
     if (p_func)
         p_func();
 
-    #if defined(CART_31k_1kflash) || defined(CART_mbc5)
+    #if defined(CART_31k_1kflash) || defined(CART_mbc5) || defined(CART_md0_sram)
         if (settings_save_required) {
             cartsave_save_data();
         }

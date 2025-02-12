@@ -30,7 +30,7 @@ void stats_reset(void) {
     game_settings.guesses_sum = 0;
 
     // For relevant carts, save the reset stats
-    #if defined(CART_31k_1kflash) || defined(CART_mbc5)
+    #if defined(CART_31k_1kflash) || defined(CART_mbc5) || defined(CART_md0_sram)
         cartsave_save_data();
     #endif
 }
@@ -58,7 +58,7 @@ void stats_update(bool game_won, uint8_t guess_num) {
     }
 
     // For relevant carts, save the reset stats
-    #if defined(CART_31k_1kflash) || defined(CART_mbc5)
+    #if defined(CART_31k_1kflash) || defined(CART_mbc5) || defined(CART_md0_sram)
         cartsave_save_data();
     #endif
 }

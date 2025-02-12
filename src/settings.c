@@ -30,7 +30,7 @@ void options_reset(void) {
         game_settings.opt_blank_5 = 0x00;
 
     // For relevant carts, save the reset stats
-    #if defined(CART_31k_1kflash) || defined(CART_mbc5)
+    #if defined(CART_31k_1kflash) || defined(CART_mbc5) || defined(CART_md0_sram)
         cartsave_save_data();
     #endif
 }
@@ -39,7 +39,7 @@ void options_reset(void) {
 // Initialize settings and stats on power-up, try to load values from cart sram/flash
 void settings_load(void) {
 
-    #if defined(CART_31k_1kflash) || defined(CART_mbc5)
+    #if defined(CART_31k_1kflash) || defined(CART_mbc5) || defined(CART_md0_sram)
         // Check signature, reset stats and notify if signature failed
         // It is expected to fail on first power-up
         cartsave_restore_data();
@@ -72,7 +72,7 @@ void hardmode_handle_change(void) {
         play_sfx(SFX_MENU_ACTION_ACKNOWLEDGE);
 
         // For relevant carts, save the reset stats
-        #if defined(CART_31k_1kflash) || defined(CART_mbc5)
+        #if defined(CART_31k_1kflash) || defined(CART_mbc5) || defined(CART_md0_sram)
             cartsave_save_data();
         #endif
 
