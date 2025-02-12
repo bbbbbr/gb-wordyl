@@ -53,9 +53,10 @@ Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
 
 Language / UI Translation credits:
   - Brazilian Portuguese: Bruno Maestrini & Daniel Tolentino - https://github.com/DanielTolentino
-  - Fench: Cizia - https://github.com/cizia64
+  - French: Cizia - https://github.com/cizia64
   - Dutch: Ferrante Crafts - https://ferrantecrafts.com
   - German: Skite2001 - https://twitter.com/skite2001
+  - Hungarian: MKCK1
   - Spanish: Adamantibus
   - Cornish:
     - SJD (https://sjd-sjd.itch.io/)
