@@ -5,7 +5,7 @@ ifndef GBDK_HOME
 endif
 LCC = $(GBDK_HOME)bin/lcc
 
-VERSION=1.0.5
+VERSION=1.0.6
 
 # Alternate languages can be passed in as follows
 # de en es fr it nl pt-br
@@ -53,7 +53,7 @@ endif
 # 31K+1k cart loses 1024 bytes at the end for flash storage
 ifeq ($(CART_TYPE),31k_1kflash)
 	# No reason to build .pocket for the 31K + 1k flash cart
-	TARGETS=gb
+	TARGETS=gb megaduck
 	# Add the flash 1K region as an exclusive no-use area for rom usage calcs
 	ROMUSAGE_flags = -e:FLASH_SAVE:7C00:400
 endif
@@ -257,6 +257,16 @@ romusage:
 # Ignores failure if romusage not in path
 	-romusage build/gb/gb-wordyl_$(VERSION)_$(CART_TYPE)_$(LANG_CODE).noi $(ROMUSAGE_flags) -e:STACK:DEFF:100 -e:SHADOW_OAM:C000:A0
 	-romusage build/gb/gb-wordyl_$(VERSION)_$(CART_TYPE)_$(LANG_CODE).noi $(ROMUSAGE_flags) -e:STACK:DEFF:100 -e:SHADOW_OAM:C000:A0 > romusage.txt
+
+package:
+	mkdir -p "../Build Archive/$(VERSION)"
+	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_32k_nosave.zip"       Manual.md README.md build/duck/*32k_nosave*.duck
+	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_31k_1kflash.zip"      Manual.md README.md build/duck/*31k_1kflash*.duck
+	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_32k_nosave.zip"        Manual.md README.md build/gb/*32k_nosave*.gb
+	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_31k_1kflash.zip"       Manual.md README.md build/gb/*31k_1kflash*.gb
+	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_mbc5.zip"              Manual.md README.md build/gb/*mbc5*.gb
+	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_AnaloguePocket_32k_nosave.zip" Manual.md README.md build/pocket/*32k_nosave*.pocket
+	zip -r -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_AnaloguePocket_mbc5.zip"       Manual.md README.md build/pocket/*mbc5*.pocket
 
 clean:
 	@echo Cleaning

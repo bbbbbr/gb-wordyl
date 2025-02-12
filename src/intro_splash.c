@@ -123,58 +123,104 @@ void splash_init_maps(void) {
 
 #define CHR_NUM(c) (c - 'A')
 
-// 31k + 1k cart release gets separate naming
+// 31k + 1k cart release gets separate naming for GB port
 #if defined(CART_31k_1kflash)
-    // "  GBBOY WORDYL";
-    const uint8_t splash_text[] = {
-            BOARD_LETTERS_SPACE_CHAR,
-            CHR_NUM('G'),
-            CHR_NUM('B'),
-            BOARD_LETTERS_SPACE_CHAR,
+    #ifdef MEGADUCK
+        // "DUCK DUCK WORDYL";
+        const uint8_t splash_text[] = {
+                CHR_NUM('D'),
+                CHR_NUM('U'),
+                CHR_NUM('C'),
+                CHR_NUM('K'),
+                CHR_NUM('D'),
+                CHR_NUM('U'),
+                CHR_NUM('C'),
+                CHR_NUM('K'),
+                BOARD_LETTERS_SPACE_CHAR,
+                CHR_NUM('W'),
+                CHR_NUM('O'),
+                CHR_NUM('R'),
+                CHR_NUM('D'),
+                BOARD_LETTERS_SPACE_CHAR,
+                BOARD_LETTERS_SPACE_CHAR,
+                BOARD_LETTERS_SPACE_CHAR,
+                CHR_NUM('Y'),
+                CHR_NUM('L'),};
 
-            BOARD_LETTERS_SPACE_CHAR,
-            BOARD_LETTERS_SPACE_CHAR,
-            BOARD_LETTERS_SPACE_CHAR,
-            // CHR_NUM('B'),
-            // CHR_NUM('O'),
-            // CHR_NUM('Y'),
-            BOARD_LETTERS_SPACE_CHAR,
-            CHR_NUM('W'),
-            CHR_NUM('O'),
-            CHR_NUM('R'),
-            CHR_NUM('D'),
-            BOARD_LETTERS_SPACE_CHAR,
-            BOARD_LETTERS_SPACE_CHAR,
-            BOARD_LETTERS_SPACE_CHAR,
-            CHR_NUM('Y'),
-            CHR_NUM('L'),};
+        const uint8_t splash_text_color[] = {
+            CGB_PAL_GREEN, // GAME
+            CGB_PAL_GREEN,
+            CGB_PAL_GREEN,
+            CGB_PAL_GREEN,
+            CGB_PAL_GREEN,
+            CGB_PAL_GREEN, // DUCK
+            CGB_PAL_GREEN,
+            CGB_PAL_GREEN,
 
-    const uint8_t splash_text_color[] = {
-        CGB_PAL_WHITE, // SPACE
-        CGB_PAL_GREEN, // GB
-        CGB_PAL_GREEN,
-        CGB_PAL_WHITE, // SPACE
+            CGB_PAL_WHITE, // SPACE
 
-        CGB_PAL_WHITE, // SPACE
-        CGB_PAL_WHITE, // SPACE
-        CGB_PAL_WHITE, // SPACE
-        // CGB_PAL_GREEN, // BOY
-        // CGB_PAL_GREEN,
-        // CGB_PAL_GREEN,
-        CGB_PAL_WHITE, // SPACE
+            CGB_PAL_BLUE, // WORD
+            CGB_PAL_BLUE,
+            CGB_PAL_BLUE,
+            CGB_PAL_BLUE,
 
-        CGB_PAL_BLUE, // WORD
-        CGB_PAL_BLUE,
-        CGB_PAL_BLUE,
-        CGB_PAL_BLUE,
+            CGB_PAL_WHITE, // SPACE
+            CGB_PAL_WHITE, // SPACE
+            CGB_PAL_WHITE, // SPACE
 
-        CGB_PAL_WHITE, // SPACE
-        CGB_PAL_WHITE, // SPACE
-        CGB_PAL_WHITE, // SPACE
+            CGB_PAL_BLUE,  // YL
+            CGB_PAL_BLUE};
+    #else
+        // "  GBBOY WORDYL"; (For Ferrante Crafts 31k+1k release)
+        const uint8_t splash_text[] = {
+                BOARD_LETTERS_SPACE_CHAR,
+                CHR_NUM('G'),
+                CHR_NUM('B'),
+                BOARD_LETTERS_SPACE_CHAR,
 
-        CGB_PAL_BLUE,  // YL
-        CGB_PAL_BLUE};
+                BOARD_LETTERS_SPACE_CHAR,
+                BOARD_LETTERS_SPACE_CHAR,
+                BOARD_LETTERS_SPACE_CHAR,
+                // CHR_NUM('B'),
+                // CHR_NUM('O'),
+                // CHR_NUM('Y'),
+                BOARD_LETTERS_SPACE_CHAR,
+                CHR_NUM('W'),
+                CHR_NUM('O'),
+                CHR_NUM('R'),
+                CHR_NUM('D'),
+                BOARD_LETTERS_SPACE_CHAR,
+                BOARD_LETTERS_SPACE_CHAR,
+                BOARD_LETTERS_SPACE_CHAR,
+                CHR_NUM('Y'),
+                CHR_NUM('L'),};
 
+        const uint8_t splash_text_color[] = {
+            CGB_PAL_WHITE, // SPACE
+            CGB_PAL_GREEN, // GB
+            CGB_PAL_GREEN,
+            CGB_PAL_WHITE, // SPACE
+
+            CGB_PAL_WHITE, // SPACE
+            CGB_PAL_WHITE, // SPACE
+            CGB_PAL_WHITE, // SPACE
+            // CGB_PAL_GREEN, // BOY
+            // CGB_PAL_GREEN,
+            // CGB_PAL_GREEN,
+            CGB_PAL_WHITE, // SPACE
+
+            CGB_PAL_BLUE, // WORD
+            CGB_PAL_BLUE,
+            CGB_PAL_BLUE,
+            CGB_PAL_BLUE,
+
+            CGB_PAL_WHITE, // SPACE
+            CGB_PAL_WHITE, // SPACE
+            CGB_PAL_WHITE, // SPACE
+
+            CGB_PAL_BLUE,  // YL
+            CGB_PAL_BLUE};
+    #endif
 #else
     #ifdef MEGADUCK
         // "DUCK DUCK WORDYL";
