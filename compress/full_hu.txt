@@ -177,7 +177,6 @@ blatt
 blikk
 blokk
 blues
-bobby
 bocsi
 bodor
 bodza
@@ -249,11 +248,7 @@ cinke
 cipel
 cirok
 civil
-clown
-codec
-colon
 colos
-credo
 csajt
 csali
 csapa
@@ -313,12 +308,10 @@ dendi
 derbi
 deres
 devla
-devon
 dilis
 dimer
 dinka
 diszk
-diszn
 divat
 diviz
 dobat
@@ -547,7 +540,6 @@ fokoz
 folyt
 fonal
 fonat
-fordi
 forma
 forog
 forsz
@@ -572,7 +564,6 @@ futam
 futni
 fuvar
 fuvat
-fuzzy
 gagyi
 galaj
 gally
