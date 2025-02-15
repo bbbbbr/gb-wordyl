@@ -4,6 +4,8 @@ ifndef GBDK_HOME
 	GBDK_HOME = ~/git/gbdev/gbdk2020/gbdk-2020-git/build/gbdk/
 endif
 LCC = $(GBDK_HOME)bin/lcc
+PNG2ASSET = $(GBDK_HOME)bin/png2asset
+GBCOMPRESS = $(GBDK_HOME)bin/gbcompress
 
 VERSION=1.0.6
 
@@ -264,8 +266,8 @@ langs-compress:
 
 romusage:
 # Ignores failure if romusage not in path
-	-romusage build/gb/gb-wordyl_$(VERSION)_$(CART_TYPE)_$(LANG_CODE).noi $(ROMUSAGE_flags) -e:STACK:DEFF:100 -e:SHADOW_OAM:C000:A0
-	-romusage build/gb/gb-wordyl_$(VERSION)_$(CART_TYPE)_$(LANG_CODE).noi $(ROMUSAGE_flags) -e:STACK:DEFF:100 -e:SHADOW_OAM:C000:A0 > romusage.txt
+	-romusage build/gb/$(CART_TYPE)/gb-wordyl_$(VERSION)_$(CART_TYPE)_$(LANG_CODE).noi $(ROMUSAGE_flags) -e:STACK:DEFF:100 -e:SHADOW_OAM:C000:A0
+	-romusage build/gb/$(CART_TYPE)/gb-wordyl_$(VERSION)_$(CART_TYPE)_$(LANG_CODE).noi $(ROMUSAGE_flags) -e:STACK:DEFF:100 -e:SHADOW_OAM:C000:A0 > romusage.txt
 
 package:
 	mkdir -p "../Build Archive/$(VERSION)"
@@ -285,6 +287,21 @@ clean:
 	@for target in $(TARGETS); do \
 		$(MAKE) $$target-clean; \
 	done
+
+assets:
+# Font tiles	
+	$(PNG2ASSET) $(RESDIR)/font.png -no_palettes -keep_duplicate_tiles -tiles_only -map -bpp 1 -o $(RESDIR)/font_tiles_1bpp_precomp.c
+	$(GBCOMPRESS) --cin --cout -v --varname=font_tiles $(RESDIR)/font_tiles_1bpp_precomp.c $(RESDIR)/font_tiles_1bpp_gbcompress.c
+	rm $(RESDIR)/font_tiles_1bpp_precomp.c $(RESDIR)/font_tiles_1bpp_precomp.h
+# TODO:
+# cursor_tiles.c
+# board_grid_tiles_gbcompress.c
+# board_letter_tiles_8x8_1bpp_gbcomp.c
+# font_num_tiles_1bpp_gbcompressed.c
+# intro_and_dialog_tiles.c
+# intro_dialog_map_gbcompress.c
+# intro_stars_map_gbcompress.c
+
 
 # Include available build targets
 include Makefile.targets

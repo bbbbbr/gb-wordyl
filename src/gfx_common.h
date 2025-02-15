@@ -141,18 +141,19 @@ void gfx_load(void);
         #define BG_TILES_FONT_QMARK   (BG_TILES_FONT_START + 28u)
         #define BG_TILES_FONT_COLON   (BG_TILES_FONT_START + 29u)
         #define BG_TILES_FONT_PLUS    (BG_TILES_FONT_START + 30u)
-        #define BG_TILES_FONT_QUOTE   (BG_TILES_FONT_START + 31u)
+        #define BG_TILES_FONT_MINUS   (BG_TILES_FONT_START + 31u)
+        #define BG_TILES_FONT_QUOTE   (BG_TILES_FONT_START + 32u)
 
         // Gamepad Buttons
         // #define BG_TILES_FONT_BUTTON_A (BG_TILES_FONT_START + 29u)
         // #define BG_TILES_FONT_BUTTON_B (BG_TILES_FONT_START + 30u)
-        #define BG_TILES_FONT_BUTTON_U (BG_TILES_FONT_START + 32u) // '^' char
-        #define BG_TILES_FONT_BUTTON_D (BG_TILES_FONT_START + 33u) // '/' char
-        #define BG_TILES_FONT_BUTTON_L (BG_TILES_FONT_START + 34u) // '<' char
-        #define BG_TILES_FONT_BUTTON_R (BG_TILES_FONT_START + 35u) // '>' char
+        #define BG_TILES_FONT_BUTTON_U (BG_TILES_FONT_START + 33u) // '^' char
+        #define BG_TILES_FONT_BUTTON_D (BG_TILES_FONT_START + 34u) // '/' char
+        #define BG_TILES_FONT_BUTTON_L (BG_TILES_FONT_START + 35u) // '<' char
+        #define BG_TILES_FONT_BUTTON_R (BG_TILES_FONT_START + 36u) // '>' char
 
-        #define BG_TILES_FONT_CHECKBOX_OFF (BG_TILES_FONT_START + 36u) // not str printable
-        #define BG_TILES_FONT_CHECKBOX_ON  (BG_TILES_FONT_START + 37u) // not str printable
+        #define BG_TILES_FONT_CHECKBOX_OFF (BG_TILES_FONT_START + 37u) // not str printable
+        #define BG_TILES_FONT_CHECKBOX_ON  (BG_TILES_FONT_START + 38u) // not str printable
     #define BG_TILES_LAST     (BG_TILES_FONT_CHECKBOX_ON)
 
 #define BG_TILES_FONT_LEN     ((BG_TILES_LAST - BG_TILES_FONT_START) + 1u)

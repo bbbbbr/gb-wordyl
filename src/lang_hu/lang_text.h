@@ -183,9 +183,10 @@
 #undef __MESSAGE_GAME_WON_STR
 #define __MESSAGE_GAME_WON_STR \
 /*  |------------------| Available space (18 chars wide) */\
-    "NYERTES VAGY!\n" \
+    "  NYERTES VAGY!\n" \
     "\n" \
-    "PROBALKOZAS ^/6"
+    "   PROBALKOZAS\n" \
+    "    ^ A 6-BOL"
 
 
 // Avoid increasing this popup height so it doesn't obscure the board

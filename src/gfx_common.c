@@ -90,6 +90,7 @@ void print_str(const char * txt) {
                 case '?': letter = BG_TILES_FONT_QMARK; break;
                 case ':': letter = BG_TILES_FONT_COLON; break;
                 case '+': letter = BG_TILES_FONT_PLUS; break;
+                case '-': letter = BG_TILES_FONT_MINUS; break;
                 case '<': letter = BG_TILES_FONT_BUTTON_L; break;
                 case '>': letter = BG_TILES_FONT_BUTTON_R; break;
                 case '^': letter = BG_TILES_FONT_BUTTON_U; break;
