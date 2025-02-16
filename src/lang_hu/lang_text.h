@@ -51,9 +51,9 @@
 // #undef HELP_LEGEND_MAP_Y
 #undef HELP_LEGEND_MAP_Y_GAP
 // #define HELP_LEGEND_MAP_Y (2u)     // Start Win Y for color key board letters
-#define HELP_LEGEND_MAP_Y_GAP (1u) // Gap between color key board letters in case more space is needed        
+#define HELP_LEGEND_MAP_Y_GAP (0u) // Gap between color key board letters in case more space is needed        
 #undef HELP_LEGEND_DIALOG_WIN_Y
-#define HELP_LEGEND_DIALOG_WIN_Y  DIALOG_TEXT_HEIGHT_LINES(9)
+#define HELP_LEGEND_DIALOG_WIN_Y  DIALOG_TEXT_HEIGHT_LINES(7u)
 #undef __HELP_LEGEND_DIALOG_STR
 #define __HELP_LEGEND_DIALOG_STR \
 /*  |----------------XX| Available space (16 chars wide, 2 reserved for letter legend tiles) */\
