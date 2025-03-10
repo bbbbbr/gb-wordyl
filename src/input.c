@@ -7,7 +7,11 @@
 #include "common.h"
 
 #if (defined(MEGADUCK))
+    #include <duck/laptop_io.h>
+    #include <duck/laptop_keycodes.h>
     #include "megaduck_laptop/megaduck_keyboard.h"
+
+    duck_keyboard_data_t keydata;
 #endif
 
 uint8_t keys = 0x00;
@@ -29,10 +33,10 @@ void waitpadreleased_lowcpu(uint8_t button_mask) {
             // Poll for keyboard keys every other frame
             // (Polling intervals below 20ms may cause keyboard lockup)
             if ((sys_time & 0x01u) && (megaduck_laptop_detected)) {
-                if (megaduck_keyboard_poll_keys()) {
-                    megaduck_keyboard_process_keys();
+                if (duck_io_poll_keyboard(&keydata)) {
+                    duck_io_process_key_data(&keydata, megaduck_model);
 
-                    if ((!megaduck_key_pressed) &&
+                    if ((!key_pressed) &&
                         (!KEY_PRESSED(button_mask))) break;
                 }
             }
@@ -52,7 +56,6 @@ void waitpadreleased_lowcpu(uint8_t button_mask) {
 void waitpadticked_lowcpu(uint8_t button_mask) {
 
     bool keyboard_checked = false;
-    uint8_t megaduck_key_pressed_last = 0u;
 
     while (1) {
 
@@ -76,21 +79,20 @@ void waitpadticked_lowcpu(uint8_t button_mask) {
             // (Polling intervals below 20ms may cause keyboard lockup)
             if ((sys_time & 0x01u) && (megaduck_laptop_detected)) {
 
-                if (megaduck_keyboard_poll_keys()) {
-                    megaduck_keyboard_process_keys();
+                if (duck_io_poll_keyboard(&keydata)) {
+                    duck_io_process_key_data(&keydata, megaduck_model);
 
                     // Prevent passing through any key press by flagging the press
                     // and then returning once no keys are pressed
                     if (keyboard_checked) {
-                        if ((megaduck_key_pressed) && (!megaduck_key_pressed_last))
+                        if ((key_pressed) && (!key_previous))
                             return;
                     }
-`
+
                     // Only register a non-pressed key if key repeat is not active)
                     // (otherwise the gaps between repeated keys might look like non-keypresses
-                    if (!(megaduck_key_flags & KEY_FLAG_KEY_REPEAT)) {
+                    if (!(keydata.flags & DUCK_IO_KEY_FLAG_KEY_REPEAT)) {
                         keyboard_checked = true;
-                        megaduck_key_pressed_last = megaduck_key_pressed;
                     }
                 }
             }

@@ -290,11 +290,10 @@ void gameplay_run(void)
             // Poll for keyboard keys every other frame
             // (Polling intervals below 20ms may cause keyboard lockup)
             if ((sys_time & 0x01u) && (megaduck_laptop_detected)) {
-                if (megaduck_keyboard_poll_keys()) {
+                if (duck_io_poll_keyboard(&keydata)) {
+                    duck_io_process_key_data(&keydata, megaduck_model);
 
-                    megaduck_keyboard_process_keys();
-
-                    switch (megaduck_key_pressed) {
+                    switch (key_pressed) {
                         case NO_KEY: break;
 
                         // case KEY_ARROW_UP:    keyboard_move_cursor(J_UP);    break;
@@ -331,13 +330,13 @@ void gameplay_run(void)
 
                         default: // Try to add a letter from the keyboard
                                  // Force a-z lowercase to upper-case
-                                 if ((megaduck_key_pressed >= 'a') && (megaduck_key_pressed <= 'z'))
-                                        megaduck_key_pressed -= ('a' - 'A');
+                                 if ((key_pressed >= 'a') && (key_pressed <= 'z'))
+                                        key_pressed -= ('a' - 'A');
 
                                  // Only allow A-Z
-                                 if ( (megaduck_key_pressed >= 'A') && (megaduck_key_pressed <= 'Z')) {
+                                 if ( (key_pressed >= 'A') && (key_pressed <= 'Z')) {
                                     play_sfx(SFX_TILE_ADD);
-                                    board_add_guess_letter(megaduck_key_pressed);
+                                    board_add_guess_letter(key_pressed);
                                  }
                                  break;
 

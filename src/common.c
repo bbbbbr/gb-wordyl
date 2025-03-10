@@ -20,7 +20,6 @@ uint8_t guess_eval[WORD_LENGTH];
 bool answer_letter_used[WORD_LENGTH];
 bool guess_letter_used[WORD_LENGTH];
 
-bool megaduck_laptop_detected;
 
 uint8_t guess_num;
 uint8_t guess_letter_cursor;
@@ -30,6 +29,11 @@ char exact_matches[WORD_LENGTH+1]; // Used for auto-fill of previous exact match
 char prev_guess[WORD_LENGTH+1]; // Used for hard-mode enforcement
 char guess[WORD_LENGTH+1]; // Current guess
 char word[WORD_LENGTH+1];  // TODO: rename this to "answer_word"
+
+#if defined(MEGADUCK)
+    bool megaduck_laptop_detected;
+    uint8_t megaduck_model;
+#endif
 
 
 // Patch a bool checkbox indicator into the string at char '^'

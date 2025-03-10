@@ -228,11 +228,10 @@ void menu_run(void) {
             // Poll for keyboard keys every other frame
             // (Polling intervals below 20ms may cause keyboard lockup)
             if ((sys_time & 0x01u) && (megaduck_laptop_detected)) {
-                if (megaduck_keyboard_poll_keys()) {
+                if (duck_io_poll_keyboard(&keydata)) {
+                    duck_io_process_key_data(&keydata, megaduck_model);
 
-                    megaduck_keyboard_process_keys();
-
-                    switch (megaduck_key_pressed) {
+                    switch (key_pressed) {
                         case ' ':           // Fall through, same as Enter
                         case KEY_ENTER:     // Apply action for current menu item
                                             // If it has a variable, invert it and redraw

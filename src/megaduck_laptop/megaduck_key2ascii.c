@@ -1,17 +1,17 @@
 #include <gbdk/platform.h>
 #include <stdint.h>
 
-#include "megaduck_keyboard.h"
-#include "megaduck_key2ascii.h"
-#include "megaduck_keycodes.h"
-#include "megaduck_model.h"
+#include <duck/model.h>
+#include <duck/laptop_keycodes.h>
 
+#include "megaduck_key2ascii.h"
+#include "megaduck_keyboard.h"
 
 
 // TODO: Not a very efficient use of space, lots of null entries
-const char key_code_to_ascii_LUT_spanish_layout[] = {
+const char scancode_to_ascii_LUT_spanish[] = {
 
-    // == Start of shift adjusted scan code range (0x00 -> 0x7F) ==
+    // == Start of shift adjusted scan code range (0x00 through 0x7F) ==
     //
     // Caps lock is handled separate by manually adjusting a-z
 
@@ -153,7 +153,7 @@ const char key_code_to_ascii_LUT_spanish_layout[] = {
 
 
 
-    // == Start of actual scan code range (0x80 -> 0xFF) ==
+    // == Start of actual scan code range (0x80 through 0xFF) ==
 
     NO_KEY,     // 0x80 SYS_KBD_CODE_F1
     KEY_ESCAPE, // 0x81 SYS_KBD_CODE_ESCAPE
@@ -293,9 +293,9 @@ const char key_code_to_ascii_LUT_spanish_layout[] = {
 };
 
 
-char megaduck_keycode_to_ascii(const uint8_t key_code) {
+char duck_io_scancode_to_ascii(const uint8_t key_code, const uint8_t megaduck_model) {
 
-    char ascii_char = key_code_to_ascii_LUT_spanish_layout[key_code];
+    char ascii_char = scancode_to_ascii_LUT_spanish[key_code];
 
     // Handle alternate German keyboard layout
     if (megaduck_model == MEGADUCK_LAPTOP_GERMAN)
@@ -326,5 +326,4 @@ char megaduck_keycode_to_ascii(const uint8_t key_code) {
         }
 
     return ascii_char;
-
 }

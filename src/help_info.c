@@ -18,7 +18,7 @@
 #include <lang_text.h>
 
 #if (defined(MEGADUCK))
-    #include "megaduck_laptop/megaduck_model.h"
+    #include <duck/model.h>
 #endif
 
 

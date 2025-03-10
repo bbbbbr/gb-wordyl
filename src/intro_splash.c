@@ -344,12 +344,12 @@ void splash_animate_title(void) {
             vsync();
             if (megaduck_laptop_detected) {
 
-                if (megaduck_keyboard_poll_keys()) {
-                    megaduck_keyboard_process_keys();
+                if (duck_io_poll_keyboard(&keydata)) {
+                    duck_io_process_key_data(&keydata, megaduck_model);
 
                     // Prevent passing through any key press by flagging the press
                     // and then returning once no keys are pressed
-                    if (megaduck_key_pressed) {
+                    if (key_pressed) {
                         skip_anim = true;
                         // Don't use play_sfx() since that checks if sound is enabled
                         // 1) Don't want to gate by that, 2) options haven't yet been loaded from Flash ROM / SRAM

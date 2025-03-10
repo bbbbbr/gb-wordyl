@@ -3,6 +3,11 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+#if (defined(MEGADUCK))
+    #include <duck/laptop_io.h>
+    #include "megaduck_laptop/megaduck_keyboard.h"
+#endif
+
 #define J_ANY_KEY           0xFFu
 #define J_WAIT_ALL_RELEASED 0xFFu
 #define J_WAIT_ANY_PRESSED  0x00u
@@ -40,6 +45,10 @@ extern uint8_t previous_keys;
 extern uint8_t keys_ticked;
 // extern uint8_t keys_changed;
 extern uint8_t key_repeat_count;
+
+#if (defined(MEGADUCK))
+    extern duck_keyboard_data_t keydata;
+#endif
 
 #endif // INPUT_H
 

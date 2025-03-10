@@ -108,7 +108,7 @@ uint8_t win_dialog_show_message(uint8_t win_y_moveto, uint8_t * str_1, uint8_t *
     // Handle keyboard confirmation via up arrow
     #if defined(MEGADUCK)
         if (megaduck_laptop_detected) {
-            if (megaduck_key_pressed == KEY_ARROW_UP) {
+            if (key_pressed == KEY_ARROW_UP) {
                 ret_keys_ticked = DIALOG_CONFIRM_BUTTON;
             }
         }

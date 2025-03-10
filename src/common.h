@@ -93,7 +93,12 @@ extern char prev_guess[WORD_LENGTH+1];
 extern char guess[WORD_LENGTH+1];
 extern char word[WORD_LENGTH+1];
 
-extern bool megaduck_laptop_detected;
+
+#if defined(MEGADUCK)
+    extern bool    megaduck_laptop_detected;
+    extern uint8_t megaduck_model;
+#endif
+
 
 // Save record signature check
 #define STATS_SIG_CHECK_0 0xA50Fu

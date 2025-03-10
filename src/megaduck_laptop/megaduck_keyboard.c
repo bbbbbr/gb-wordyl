@@ -2,29 +2,21 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "megaduck_laptop_io.h"
-#include "megaduck_keyboard.h"
+#include <duck/laptop_io.h>
+#include <duck/laptop_keycodes.h>
+
 #include "megaduck_key2ascii.h"
-#include "megaduck_keycodes.h"
+#include "megaduck_keyboard.h"
 
-
-uint8_t int_enable_saved;
-
-
-uint8_t megaduck_io_packet_length;
-uint8_t megaduck_key_flags;
-uint8_t megaduck_key_code;
-uint8_t megaduck_io_checksum_calc;
 
 #define REPEAT_OFF                 0u
 #define REPEAT_FIRST_THRESHOLD     8u
 #define REPEAT_CONTINUE_THRESHOLD  4u
 
-char megaduck_key_pressed        = NO_KEY;
-char megaduck_key_previous       = NO_KEY;
-bool keyboard_repeat_allowed     = false;
-uint8_t megaduck_key_flags           = 0x00u;
-uint8_t keyboard_repeat_timeout  = REPEAT_OFF;
+bool    key_repeat_allowed  = false;
+uint8_t key_repeat_timeout  = REPEAT_OFF;
+uint8_t key_pressed         = NO_KEY;
+uint8_t key_previous        = NO_KEY;
 
 
 // RX Bytes for Keyboard Serial Reply Packet
@@ -44,18 +36,15 @@ uint8_t keyboard_repeat_timeout  = REPEAT_OFF;
 //     - I.E: (#4 + #1 + #2 + #3) == 0x100 -> unsigned overflow -> 0x00
 
 
-
-// Request keyboard input and handle the response
+// Request Keyboard data and handle the response
 //
-// Returns success or failure, resulting key data is in:
-//   megaduck_key_flags & megaduck_key_code
-//
-bool megaduck_keyboard_poll_keys(void) {
+// Returns success or failure (Keyboard struct data not updated if polling failed)
+bool duck_io_poll_keyboard(duck_keyboard_data_t * key_data) {
 
-    if (serial_io_send_command_and_receive_buffer(SYS_CMD_KBD_START)) {
-        if (megaduck_serial_rx_buf_len == SYS_REPLY_KBD_LEN) {
-            megaduck_key_flags = megaduck_serial_rx_buf[0];
-            megaduck_key_code  = megaduck_serial_rx_buf[1];
+    if (duck_io_send_cmd_and_receive_buffer(DUCK_IO_CMD_GET_KEYS)) {
+        if (duck_io_rx_buf_len == DUCK_IO_LEN_KBD_GET) {
+            key_data->flags     = duck_io_rx_buf[DUCK_IO_KBD_FLAGS];
+            key_data->scancode  = duck_io_rx_buf[DUCK_IO_KBD_KEYCODE];
             return true;
         }
     }
@@ -63,47 +52,60 @@ bool megaduck_keyboard_poll_keys(void) {
 }
 
 
-// Translates key codes to ascii
+// Translates key scancodes to ascii
 // Handles Shift/Caps Lock and Repeat flags
-void megaduck_keyboard_process_keys(void) {
+//
+// Returns translated key (if no key pressed, invalid, etc value will be NO_KEY)
+char duck_io_process_key_data(duck_keyboard_data_t * key_data, uint8_t megaduck_model) {
 
-    // Key repeat processing is optional
-    if ((megaduck_key_flags & KEY_FLAG_KEY_REPEAT) && (keyboard_repeat_allowed)) {
+    // Optional program layer of key repeat on top of
+    // hardware key repeat (which is too fast, mostly)
+    //
+    // The hardware repeat works like this:
+    // - First  packet after key press: Repeat Flag *NOT* set, Scan code matches key
+    // - N+1   packets after key press: Repeat Flag *IS*  set, Scan code set to 0x00 (None) remains this way until key released
+    if ((key_data->flags & DUCK_IO_KEY_FLAG_KEY_REPEAT) && (key_repeat_allowed)) {
+
         // Default to no key repeat
-        megaduck_key_pressed = NO_KEY;
+        key_pressed = NO_KEY;
 
-        if (keyboard_repeat_timeout) {
-            keyboard_repeat_timeout--;
+        if (key_repeat_timeout) {
+            key_repeat_timeout--;
         } else {
-            // Small delay than initial threshold until next repeat
-            megaduck_key_pressed = megaduck_key_previous;
-            keyboard_repeat_timeout = REPEAT_CONTINUE_THRESHOLD;
+            // If there is a repeat then send the previous pressed key
+            // and set a small delay until next repeat
+            key_pressed = key_previous;
+            key_repeat_timeout = REPEAT_CONTINUE_THRESHOLD;
         }
     }
     else {
-        megaduck_key_flags = megaduck_key_flags;
-        uint8_t temp_megaduck_key_code = megaduck_key_code;
+        key_data->flags = key_data->flags;
+        uint8_t temp_key_scancode = key_data->scancode;
 
         // If only shift is enabled, use keycode translation for shift alternate keys (-= 0x80u)
-        if ((megaduck_key_flags & (KEY_FLAG_CAPSLOCK | KEY_FLAG_SHIFT)) == KEY_FLAG_SHIFT)
-            temp_megaduck_key_code -= MEGADUCK_KEY_BASE;
+        if ((key_data->flags & (DUCK_IO_KEY_FLAG_CAPSLOCK | DUCK_IO_KEY_FLAG_SHIFT)) == DUCK_IO_KEY_FLAG_SHIFT)
+            temp_key_scancode -= DUCK_IO_KEY_BASE;
 
-        megaduck_key_pressed = megaduck_keycode_to_ascii(temp_megaduck_key_code);
+        key_pressed = duck_io_scancode_to_ascii(temp_key_scancode, megaduck_model);
 
         // If only caps lock is enabled, just translate a-z -> A-Z with no other shift alternates
-        if ((megaduck_key_flags & (KEY_FLAG_CAPSLOCK | KEY_FLAG_SHIFT)) == KEY_FLAG_CAPSLOCK)
-            if ((megaduck_key_pressed >= 'a') && (megaduck_key_pressed <= 'z'))
-                megaduck_key_pressed -= ('a' - 'A');
+        if ((key_data->flags & (DUCK_IO_KEY_FLAG_CAPSLOCK | DUCK_IO_KEY_FLAG_SHIFT)) == DUCK_IO_KEY_FLAG_CAPSLOCK)
+            if ((key_pressed >= 'a') && (key_pressed <= 'z'))
+                key_pressed -= ('a' - 'A');
 
-        // Repeat ok for ascii 32 (space) and higher + arrow keys
-        if ((megaduck_key_pressed >= ' ') ||
-            ((megaduck_key_pressed >= KEY_ARROW_UP) && (megaduck_key_pressed <= KEY_ARROW_LEFT))) {
-            keyboard_repeat_allowed = true;
-            keyboard_repeat_timeout = REPEAT_FIRST_THRESHOLD;
+        // Only allow repeat for the range from:
+        // - ASCII 32 (space) and higher
+        // - As well as arrow keys
+        if ((key_pressed >= ' ') ||
+            ((key_pressed >= KEY_ARROW_UP) && (key_pressed <= KEY_ARROW_LEFT))) {
+            key_repeat_allowed = true;
+            key_repeat_timeout = REPEAT_FIRST_THRESHOLD;
         } else
-            keyboard_repeat_allowed = false;
+            key_repeat_allowed = false;
 
         // Save key for repeat
-        megaduck_key_previous = megaduck_key_pressed;        
+        key_previous = key_pressed;
     }
+
+    return key_pressed;
 }

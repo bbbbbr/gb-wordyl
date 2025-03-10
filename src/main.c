@@ -25,8 +25,8 @@
     #include "sgb/sgb_border.h"
 #endif
 #if (defined(MEGADUCK))
-    #include "megaduck_laptop/megaduck_laptop_io.h"
-    #include "megaduck_laptop/megaduck_model.h"
+    #include <duck/model.h>
+    #include <duck/laptop_io.h>
 #endif
 
 #include "decode.h"
@@ -74,10 +74,8 @@ void main(void) {
     #endif
 
     #if defined(MEGADUCK)
-        megaduck_laptop_check_model_vram_on_startup();  // This must be called before any vram tiles are loaded
-        megaduck_laptop_detected = megaduck_laptop_init();
-    #else
-        megaduck_laptop_detected = false;
+        megaduck_model = duck_check_model();  // This must be called before any vram tiles are loaded
+        megaduck_laptop_detected = duck_io_laptop_init();
     #endif
 
     fade_out();
