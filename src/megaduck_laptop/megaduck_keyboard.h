@@ -32,8 +32,9 @@ typedef struct duck_keyboard_data_t {
 
 
 // Post-Processed key data
-extern uint8_t    key_pressed;
-extern uint8_t    key_previous;
+extern uint8_t key_pressed;
+extern uint8_t key_previous;
+
 
 bool duck_io_poll_keyboard(duck_keyboard_data_t * key_data);
 char duck_io_process_key_data(duck_keyboard_data_t * key_data, uint8_t megaduck_model);
