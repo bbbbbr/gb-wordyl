@@ -6,7 +6,7 @@
 
 
 extern void flash_sector_address;
-uint8_t erase_flash() OLDCALL;                                 // erase FLASH sector
+uint8_t erase_flash(void) OLDCALL;                                 // erase FLASH sector
 uint8_t write_flash(uint8_t * source, uint16_t size) OLDCALL;  // write data to FLASH
 
 
