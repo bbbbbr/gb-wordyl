@@ -10,6 +10,7 @@
     #include <duck/laptop_io.h>
     #include <duck/laptop_keycodes.h>
     #include "megaduck_laptop/megaduck_keyboard.h"
+    #include "megaduck_laptop/megaduck_printer.h"
 
     duck_keyboard_data_t keydata;
 #endif
@@ -35,6 +36,11 @@ void waitpadreleased_lowcpu(uint8_t button_mask) {
             if ((sys_time & 0x01u) && (megaduck_laptop_detected)) {
                 if (duck_io_poll_keyboard(&keydata)) {
                     duck_io_process_key_data(&keydata, megaduck_model);
+
+                    if (key_pressed == KEY_PRINTSCREEN) {
+                        if (duck_io_printer_detected()) duck_io_print_screen();
+                        continue;
+                    }
 
                     if ((!key_pressed) &&
                         (!KEY_PRESSED(button_mask))) break;
@@ -81,6 +87,11 @@ void waitpadticked_lowcpu(uint8_t button_mask) {
 
                 if (duck_io_poll_keyboard(&keydata)) {
                     duck_io_process_key_data(&keydata, megaduck_model);
+
+                    if (key_pressed == KEY_PRINTSCREEN) {
+                        if (duck_io_printer_detected()) duck_io_print_screen();
+                        continue;
+                    }
 
                     // Prevent passing through any key press by flagging the press
                     // and then returning once no keys are pressed

@@ -96,6 +96,11 @@ char duck_io_process_key_data(duck_keyboard_data_t * key_data, uint8_t megaduck_
             if ((key_pressed >= 'a') && (key_pressed <= 'z'))
                 key_pressed -= ('a' - 'A');
 
+        // Allow PrintScreen flag to override any other key pressed
+        // (Left printscreen is a flag, Right one is an actual key)
+        if (key_data->flags & DUCK_IO_KEY_FLAG_PRINTSCREEN_LEFT)
+            key_pressed = KEY_PRINTSCREEN;
+
         // Only allow repeat for the range from:
         // - ASCII 32 (space) and higher
         // - As well as arrow keys

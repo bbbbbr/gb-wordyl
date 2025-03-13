@@ -31,7 +31,9 @@
 #include <cartsave.h>
 
 #if (defined(MEGADUCK))
+    #include <duck/laptop_keycodes.h>
     #include "megaduck_laptop/megaduck_keyboard.h"
+    #include "megaduck_laptop/megaduck_printer.h"
 #endif
 
 #define GAMEPLAY_SET_GAMEOVER  game_state = GAME_STATE_OVER
@@ -326,6 +328,10 @@ void gameplay_run(void)
                                               play_sfx(SFX_TILE_REMOVE);
                                               board_remove_guess_letter();
                                               board_update_letter_cursor();
+                                              break;
+
+                        case KEY_PRINTSCREEN:
+                                              if (duck_io_printer_detected()) duck_io_print_screen();
                                               break;
 
                         default: // Try to add a letter from the keyboard

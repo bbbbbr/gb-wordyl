@@ -15,6 +15,7 @@
 #define KEY_ARROW_RIGHT 3u
 #define KEY_ARROW_LEFT  4u
 #define KEY_HELP        5u
+#define KEY_PRINTSCREEN 6u
 
 
 // Use ascii values for these keys
