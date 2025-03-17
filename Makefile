@@ -24,7 +24,11 @@ endif
 # Set default type:
 ifndef CART_TYPE
 #	CART_TYPE=32k_nosave
+ifeq ($(PLAT),duck)
+	CART_TYPE=md0_sram
+else
 	CART_TYPE=mbc5
+endif
 #	CART_TYPE=31k_1kflash
 #	CART_TYPE=md0_sram
 endif
