@@ -343,6 +343,7 @@ void gameplay_run(void)
                                  if ( (key_pressed >= 'A') && (key_pressed <= 'Z')) {
                                     play_sfx(SFX_TILE_ADD);
                                     board_add_guess_letter(key_pressed);
+                                    board_update_letter_cursor();
                                  }
                                  break;
 
