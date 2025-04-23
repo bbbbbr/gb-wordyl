@@ -61,7 +61,7 @@ endif
 # 31K+1k cart loses 1024 bytes at the end for flash storage
 ifeq ($(CART_TYPE),31k_1kflash)
 	# No reason to build .pocket for the 31K + 1k flash cart
-	TARGETS=gb megaduck
+	TARGETS=gb # megaduck
 	# Add the flash 1K region as an exclusive no-use area for rom usage calcs
 	ROMUSAGE_flags = -e:FLASH_SAVE:7C00:400
 endif
