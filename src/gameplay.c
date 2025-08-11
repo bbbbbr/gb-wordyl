@@ -34,6 +34,7 @@
     #include <duck/laptop_keycodes.h>
     #include "megaduck_laptop/megaduck_keyboard.h"
     #include "megaduck_laptop/megaduck_printer.h"
+    #include "megaduck_laptop/megaduck_printscreen.h"
 #endif
 
 #define GAMEPLAY_SET_GAMEOVER  game_state = GAME_STATE_OVER
@@ -331,7 +332,7 @@ void gameplay_run(void)
                                               break;
 
                         case KEY_PRINTSCREEN:
-                                              duck_io_print_screen();
+                                              duck_print_screen();
                                               break;
 
                         default: // Try to add a letter from the keyboard

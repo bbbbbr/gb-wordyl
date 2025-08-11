@@ -3,22 +3,13 @@
 #include <stdbool.h>
 
 #include <duck/laptop_io.h>
+
 #include "megaduck_printer.h"
-
-static bool print_blank_row(uint8_t printer_type);
-static void prepare_tile_row(uint8_t row, uint8_t tile_bitplane_offset);
-static void convert_tile(uint8_t * p_out_buf, uint8_t * p_tile_buf);
-static void convert_tile_dithered(uint8_t * p_out_buf, uint8_t * p_tile_buf);
-static bool duck_io_send_tile_row_1pass(void);
-
-#define BYTES_PER_PRINTER_TILE  8u
-#define BYTES_PER_VRAM_TILE     16u
-#define TILE_HEIGHT             8u
-#define TILE_WIDTH              8u
 
 uint8_t tile_row_buffer[DEVICE_SCREEN_WIDTH * BYTES_PER_PRINTER_TILE];
 
-
+// For sending a bulk printer command to megaduck printer
+//
 // Expects duck_io_tx_buf to be pre-loaded with payload
 //
 // The System ROM uses an infinite retry which would block
@@ -37,126 +28,9 @@ static bool print_send_command_and_buffer_delay_1msec_10x_retry(uint8_t command)
 }
 
 
-// Currently unknown:
-// - Single pass printer probably does not support variable image width
-// - Double pass printer might, since it has explicit Carriage Return and Line Feed commands, but it's not verified
-//
-// So for the time being require full screen image width
-//
-// The Duck Printer mechanical Carriage Return + Line Feed process takes about
-// 500 msec for the print head to travel back to the start of the line.
-//
-// After that there is about a 600 msec period before the printer head
-// starts moving. The ASIC between the CPU and the printer may be
-// buffering printer data during that time so it can stream it out
-// with the right timing.
-//
-// So giving the printer ~1000 msec between tile rows is needed
-// to avoid printing glitches. The duration was determined through
-// trial and error.
-//
-// The same  ~1000 msec delay should be present after the last
-// tile row is sent to allow the printer to finish processing
-// that row before sending other commands. For example if this
-// isn't done and a keyboard poll is sent immediately after
-// the last tile row, then the peripheral controller seems to
-// trigger a cpu reset.
-//
-bool duck_io_print_screen(void) {
-
-    bool return_status = true;
-
-    // Check for printer connectivity
-    uint8_t printer_type = duck_io_printer_query();
-    // Fix up printer status == 3 to be printer type 1, sort of a hack
-    if (printer_type == DUCK_IO_PRINTER_MAYBE_BUSY)  printer_type = DUCK_IO_PRINTER_TYPE_1_PASS;
-    if (printer_type != DUCK_IO_PRINTER_TYPE_1_PASS) return false;
-
-    // Turn off VBlank interrupt during printing
-    uint8_t int_enables_saved = IE_REG;
-    set_interrupts(IE_REG & ~VBL_IFLAG);
-
-    // Starting with a blank row (like system rom does) avoids a glitch where
-    // a tile is skipped somewhere in the very first row printed
-    print_blank_row(printer_type);
-
-    // Send the tile data row by row
-    for (uint8_t map_row = 0; map_row < DEVICE_SCREEN_HEIGHT; map_row++) {
-        prepare_tile_row(map_row, BITPLANE_BOTH);
-        return_status = duck_io_send_tile_row_1pass();
-        if (return_status == false) break;
-    }
-
-    // Print up to N blank rows to scroll the printed result up
-    // past the printer tear off position
-    if (return_status) {
-        for (uint8_t blank_row=0u; blank_row < PRINT_NUM_BLANK_ROWS_AT_END; blank_row++) {
-            print_blank_row(printer_type);
-        }
-    }
-
-    // Restore VBlank interrupt
-    set_interrupts(int_enables_saved);
-
-    return return_status;
-}
-
-
-// Prints a blank tile row by filling the pattern data with all zeros
-// and then printing a row
-static bool print_blank_row(uint8_t printer_type) {
-
-    // Fill print buffer with zero's
-    uint8_t * p_buf = tile_row_buffer;
-    for (uint8_t c = 0u; c < (DEVICE_SCREEN_WIDTH * BYTES_PER_PRINTER_TILE); c++) {
-        *p_buf++ = 0x00u;
-    }
-    
-    return duck_io_send_tile_row_1pass();
-}
-
-
-static void prepare_tile_row(uint8_t row, uint8_t tile_bitplane_offset) {
-    
-    uint8_t tile_buffer[BYTES_PER_VRAM_TILE];
-    uint8_t * p_row_buffer = tile_row_buffer;
-
-    bool    use_win_data = (((row * TILE_HEIGHT) >= WY_REG) && ( LCDC_REG & LCDCF_WINON));
-    uint8_t col = 0;
-
-    if (!use_win_data) {
-        // Add Scroll offset to closest tile (if rendering BG instead of Window)
-        row += (SCY_REG / TILE_HEIGHT);
-        col += (SCX_REG / TILE_WIDTH);
-    }
-
-    // Loop through tile columns for the current tile row
-    for (uint8_t tile = 0u; tile < DEVICE_SCREEN_WIDTH; tile++) {
-        
-        uint8_t tile_id;
-        // Get the Tile ID from the map then copy it's tile pattern data into a buffer
-        if (use_win_data) {
-            // Read window data instead if it's enabled and visible
-            tile_id = get_win_tile_xy((col + tile) & (DEVICE_SCREEN_BUFFER_HEIGHT - 1), 
-                    (row - (WY_REG / TILE_HEIGHT)) & (DEVICE_SCREEN_BUFFER_HEIGHT - 1));
-        } else {
-            // Otherwise use the normal BG
-            tile_id = get_bkg_tile_xy((col + tile) & (DEVICE_SCREEN_BUFFER_HEIGHT - 1), 
-                                               row & (DEVICE_SCREEN_BUFFER_HEIGHT - 1));
-        }
-        get_bkg_data(tile_id, 1u, tile_buffer);
-
-        // Mirror, Rotate -90 degrees and reduce tile to 1bpp
-        if (tile_bitplane_offset == BITPLANE_BOTH)
-            convert_tile_dithered(p_row_buffer, tile_buffer);
-        else
-            convert_tile(p_row_buffer, tile_buffer + tile_bitplane_offset);
-        p_row_buffer += BYTES_PER_PRINTER_TILE;
-    }
-}
-
-
 // Transforming tile data for Printer use
+//
+//       SCREEN                --->          PRINTER
 //
 // This (1bpp) input tile               Should be transformed to the following PRINTER formatted output:
 //
@@ -177,9 +51,9 @@ static void prepare_tile_row(uint8_t row, uint8_t tile_bitplane_offset) {
 //  represents the byte 0x80               represents the byte 0xF0
 
 
-// Converts one plane (i.e. monochrome, not 4 shades of grey)
-// of an 8x8 Game Boy format tile for printing on the Mega Duck Printer. 
-static void convert_tile(uint8_t * p_out_buf, uint8_t * p_tile_buf) {
+// Converts one plane (i.e. monochrome, not 4 shades of grey) of
+// an 8x8 Game Boy format tile for printing on the Mega Duck Printer. 
+void duck_printer_convert_tile(uint8_t * p_out_buf, uint8_t * p_tile_buf) {
 
     // Clear printer tile
     for (uint8_t c = 0u; c < BYTES_PER_PRINTER_TILE; c++) {
@@ -195,10 +69,10 @@ static void convert_tile(uint8_t * p_out_buf, uint8_t * p_tile_buf) {
     // and transform them into column oriented bits spread across 8 bytes
     //
     uint8_t out_bit = 0x80u;  // X axis bit to set in the output for corresponding input
-    for (uint8_t vram_tile_row = 0u; vram_tile_row < BYTES_PER_VRAM_TILE; vram_tile_row += 2u) {
-        uint8_t tile_byte = p_tile_buf[vram_tile_row];
+    for (uint8_t tile_row = 0u; tile_row < BYTES_PER_VRAM_TILE; tile_row += 2u) {
+        uint8_t tile_byte = p_tile_buf[tile_row];
 
-        // Scan X axis Left to right
+        // Scan X axis of tile Left to right
         uint8_t tile_bit = 0x80u;
         for (uint8_t out_col = 0; out_col < TILE_HEIGHT; out_col++) {
 
@@ -216,7 +90,7 @@ static void convert_tile(uint8_t * p_out_buf, uint8_t * p_tile_buf) {
 // Color 0: always white
 // Color 1: white or black based on checkerboard dither pattern
 // Color 2 or 3: always black
-static void convert_tile_dithered(uint8_t * p_out_buf, uint8_t * p_tile_buf) {
+void duck_printer_convert_tile_dithered(uint8_t * p_out_buf, uint8_t * p_tile_buf) {
 
     // Clear printer tile
     for (uint8_t c = 0u; c < BYTES_PER_PRINTER_TILE; c++) {
@@ -231,9 +105,9 @@ static void convert_tile_dithered(uint8_t * p_out_buf, uint8_t * p_tile_buf) {
     //
     uint8_t out_bit = 0x80u;  // X axis bit to set in the output for corresponding input
     uint8_t dither  = 0xAAu;  // Dither pattern
-    for (uint8_t vram_tile_row = 0u; vram_tile_row < BYTES_PER_VRAM_TILE; vram_tile_row += 2u) {
-        uint8_t tile_byte0 = p_tile_buf[vram_tile_row];
-        uint8_t tile_byte1 = p_tile_buf[vram_tile_row+1];
+    for (uint8_t tile_row = 0u; tile_row < BYTES_PER_VRAM_TILE; tile_row += 2u) {
+        uint8_t tile_byte0 = p_tile_buf[tile_row];
+        uint8_t tile_byte1 = p_tile_buf[tile_row+1];
 
         // LSByte first, Scan X axis Left to right
         uint8_t tile_bit = 0x80u;
@@ -254,7 +128,12 @@ static void convert_tile_dithered(uint8_t * p_out_buf, uint8_t * p_tile_buf) {
 }
 
 
-static bool duck_io_send_tile_row_1pass(void) {
+// Send a prepared 20 x 8x8 row of tile data in duck_io_tx_buf[]
+// to the Mega Duck printer in 1bpp format.
+//
+// The tile data should already be transformed using one of the
+// duck_printer_convert_tile_...() functions.
+bool duck_printer_send_tile_row_1pass(void) {
 
     uint8_t * p_row_buffer = tile_row_buffer;
 

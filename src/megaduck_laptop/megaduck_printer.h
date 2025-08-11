@@ -27,14 +27,22 @@
 #define PRINT_ROW_END_ACK_WAIT_TIMEOUT_200MSEC     200u // Presumably waiting for a carriage return confirmation ACK from the printer
 #define PRINT_DELAY_BETWEEN_ROWS_1000MSEC         1000u // Waiting for the print head to return to the start of the line and buffer to be cleared
 
-#define PRINT_NUM_BLANK_ROWS_AT_END                  3u
 
-// Bitplane offsets into tile pattern data for 2 pass printing
-#define BITPLANE_0    0
-#define BITPLANE_1    1
-#define BITPLANE_BOTH 2
+#define BYTES_PER_PRINTER_TILE  8u
+#define BYTES_PER_VRAM_TILE     16u
+#define TILE_HEIGHT             8u
+#define TILE_WIDTH              8u
+
+// Buffer to store an entire queued tile row for printing
+extern uint8_t tile_row_buffer[DEVICE_SCREEN_WIDTH * BYTES_PER_PRINTER_TILE];
 
 
-bool duck_io_print_screen(void);
+bool duck_print_screen(void);
+
+bool duck_printer_send_tile_row_1pass(void);
+void duck_printer_convert_tile(uint8_t * p_out_buf, uint8_t * p_tile_buf);
+void duck_printer_convert_tile_dithered(uint8_t * p_out_buf, uint8_t * p_tile_buf);
+bool duck_printer_send_tile_row_1pass(void);
+
 
 #endif // _MEGADUCK_PRINTER_H

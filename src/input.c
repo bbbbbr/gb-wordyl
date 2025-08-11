@@ -11,6 +11,7 @@
     #include <duck/laptop_keycodes.h>
     #include "megaduck_laptop/megaduck_keyboard.h"
     #include "megaduck_laptop/megaduck_printer.h"
+    #include "megaduck_laptop/megaduck_printscreen.h"
 
     duck_keyboard_data_t keydata;
 #endif
@@ -38,7 +39,7 @@ void waitpadreleased_lowcpu(uint8_t button_mask) {
                     duck_io_process_key_data(&keydata, megaduck_model);
 
                     if (key_pressed == KEY_PRINTSCREEN) {
-                        duck_io_print_screen();
+                        duck_print_screen();
                         continue;
                     }
 
@@ -89,7 +90,7 @@ void waitpadticked_lowcpu(uint8_t button_mask) {
                     duck_io_process_key_data(&keydata, megaduck_model);
 
                     if (key_pressed == KEY_PRINTSCREEN) {
-                        duck_io_print_screen();
+                        duck_print_screen();
                         continue;
                     }
 
