@@ -6,6 +6,7 @@
 #include <gb/sgb.h>
 #include <string.h>
 
+#include "../common.h"
 #include "sgb_border.h"
 
 #include "sgb_border_data.h"
