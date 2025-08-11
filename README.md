@@ -1,5 +1,4 @@
 # gb-wordyl
-
 A word game for the Nintendo Game Boy / Color, Analogue Pocket and MegaDuck Handheld and Laptops!
 
 This is a re-written and greatly expanded fork (by [bbbbbr](https://github.com/bbbbbr/gb-wordyl)) of the original version by [stacksmashing](https://github.com/stacksmashing) ([twitter](http://twitter.com/ghidraninja)).
@@ -8,14 +7,12 @@ It adds a full dictionary (versus the bloom filter), thousands more solution wor
 
 
 ### Physical Cartridge available at Ferrante Crafts:
-
 https://ferrantecrafts.com/products/gb-wordyl
 
 ![GB-Wordyl cart and box](/info/gb-wordyl-box-cart.jpg)
 
 
 ### Download ROMs and Play Online
-
 Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
 
 - [User's Manual](Manual.md)
@@ -24,6 +21,7 @@ Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
 
 ### Special MegaDuck Features
   - Physical Keyboard support for the CEFA Super QuiQue and Hartung Super Junior Computer models
+  - Print Screen almost anywhere in the game using the Mega Duck printer for the laptop models
 
 ### Features
   - Game stats: Won, Lost, Streak & Win Percentage
@@ -50,7 +48,6 @@ Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
 
 
 ### Credits, Contributors and Thanks
-
 Language / UI Translation credits:
   - Brazilian Portuguese: Bruno Maestrini & Daniel Tolentino - https://github.com/DanielTolentino
   - French: Cizia - https://github.com/cizia64
@@ -73,6 +70,7 @@ Language / UI Translation credits:
 
 Additional code and contributions from:
   - Eucal.BB : Help with Megaduck Laptop testing and research
+  - Mancloud : Help with Megaduck Laptop research and Mega Duck printer hardware
   - Daeo : Cart and box Graphics
   - [Coffee "Valen" Bat](https://twitter.com/cofebbat) : Game Sound FX and [CBTFX Driver](https://github.com/datguywitha3ds/CBT-FX)
   - [toxa](https://github.com/untoxa/) : Ferrante Crafts 31k ROM + 1k Flash cart support
@@ -86,7 +84,6 @@ Built using [GBDK-2020](https://github.com/gbdk-2020/gbdk-2020) (4.2.0)
 
 
 ### Building from source:
-
   - Compress the dictionaries: `make dictionaries`
   - Build the ROM: `make` (default language `en` and default cart `31k_1kflash`)
     - Language option: `make LANG_CODE=<lowercase 2 letter language code>`, or `langs` to build all
