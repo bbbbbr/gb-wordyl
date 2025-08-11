@@ -37,8 +37,6 @@
 extern uint8_t tile_row_buffer[DEVICE_SCREEN_WIDTH * BYTES_PER_PRINTER_TILE];
 
 
-bool duck_print_screen(void);
-
 bool duck_printer_send_tile_row_1pass(void);
 void duck_printer_convert_tile(uint8_t * p_out_buf, uint8_t * p_tile_buf);
 void duck_printer_convert_tile_dithered(uint8_t * p_out_buf, uint8_t * p_tile_buf);
