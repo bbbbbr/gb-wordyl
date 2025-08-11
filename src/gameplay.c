@@ -331,7 +331,7 @@ void gameplay_run(void)
                                               break;
 
                         case KEY_PRINTSCREEN:
-                                              if (duck_io_printer_detected()) duck_io_print_screen();
+                                              duck_io_print_screen();
                                               break;
 
                         default: // Try to add a letter from the keyboard

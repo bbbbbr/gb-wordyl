@@ -38,7 +38,7 @@ void waitpadreleased_lowcpu(uint8_t button_mask) {
                     duck_io_process_key_data(&keydata, megaduck_model);
 
                     if (key_pressed == KEY_PRINTSCREEN) {
-                        if (duck_io_printer_detected()) duck_io_print_screen();
+                        duck_io_print_screen();
                         continue;
                     }
 
@@ -89,7 +89,7 @@ void waitpadticked_lowcpu(uint8_t button_mask) {
                     duck_io_process_key_data(&keydata, megaduck_model);
 
                     if (key_pressed == KEY_PRINTSCREEN) {
-                        if (duck_io_printer_detected()) duck_io_print_screen();
+                        duck_io_print_screen();
                         continue;
                     }
 
