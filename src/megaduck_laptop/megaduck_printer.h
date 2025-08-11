@@ -22,15 +22,17 @@
 #define PRINTER_1_PASS_ROW_NUM_BULK_BYTES          118u
 #define PRINTER_1_PASS_ROW_NUM_BULK_DATA_BYTES     112u
 #define PRINTER_1_PASS_ROW_NUM_BULK_UNKNOWN_BYTES  (PRINTER_1_PASS_ROW_NUM_BULK_BYTES - PRINTER_1_PASS_ROW_NUM_BULK_DATA_BYTES)
-#define PRINTER_1_PASS_BULK_ACK_TIMEOUT_100MSEC    100
+#define PRINTER_1_PASS_BULK_ACK_TIMEOUT_100MSEC    100u
 
-#define PRINT_ROW_END_ACK_WAIT_TIMEOUT_200MSEC  200 // Presumably waiting for a carriage return confirmation ACK from the printer
+#define PRINT_ROW_END_ACK_WAIT_TIMEOUT_200MSEC     200u // Presumably waiting for a carriage return confirmation ACK from the printer
+#define PRINT_DELAY_BETWEEN_ROWS_1000MSEC         1000u // Waiting for the print head to return to the start of the line and buffer to be cleared
+
+#define PRINT_NUM_BLANK_ROWS_AT_END                  3u
 
 // Bitplane offsets into tile pattern data for 2 pass printing
 #define BITPLANE_0    0
 #define BITPLANE_1    1
 #define BITPLANE_BOTH 2
-
 
 
 bool duck_io_print_screen(void);

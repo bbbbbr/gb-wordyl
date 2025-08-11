@@ -5,6 +5,7 @@
 #include <duck/laptop_io.h>
 #include "megaduck_printer.h"
 
+static bool print_blank_row(uint8_t printer_type);
 static void prepare_tile_row(uint8_t row, uint8_t tile_bitplane_offset);
 static void convert_tile(uint8_t * p_out_buf, uint8_t * p_tile_buf);
 static void convert_tile_dithered(uint8_t * p_out_buf, uint8_t * p_tile_buf);
@@ -21,29 +22,119 @@ static bool duck_io_send_tile_row_2pass(uint8_t tile_bitplane_offset);
 uint8_t tile_row_buffer[DEVICE_SCREEN_WIDTH * BYTES_PER_PRINTER_TILE];
 
 
+// Expects duck_io_tx_buf to be pre-loaded with payload
+static bool print_send_command_and_buffer_delay_1msec_10x_retry(uint8_t command) {
+
+    uint8_t retry = 10u;
+    while (retry--) {
+        bool result = duck_io_send_cmd_and_buffer(command);
+        delay(1);
+        if (result == true) return true;
+    }
+    return false;
+}
+
+
 // Currently unknown:
 // - Single pass printer probably does not support variable image width
 // - Double pass printer might, since it has explicit Carriage Return and Line Feed commands, but it's not verified
 //
 // So for the time being require full screen image width
+//
+// The Duck Printer mechanical Carriage Return + Line Feed process takes about
+// 500 msec for the print head to travel back to the start of the line.
+//
+// After that there is about a 600 msec period before the printer head
+// starts moving. The ASIC between the CPU and the printer may be
+// buffering printer data during that time so it can stream it out
+// with the right timing.
+//
 bool duck_io_print_screen(void) {
+
+    // Check for printer connectivity
+    uint8_t printer_type = duck_io_printer_query();
+    if (printer_type == DUCK_IO_PRINTER_FAIL) {
+        return false;
+    }
+
+    bool return_status = true;
+
+    // Turn off VBlank interrupt during printing
+    uint8_t int_enables_saved = IE_REG;
+    set_interrupts(IE_REG & ~VBL_IFLAG);
+
+    if (printer_type == DUCK_IO_PRINTER_MAYBE_BUSY)
+        printer_type = DUCK_IO_PRINTER_TYPE_1_PASS;
+
+
+    // Starting with a blank row (like system rom does) avoids a glitch where
+    // a tile is skipped somewhere in the very first row printed
+    print_blank_row(printer_type);
 
     for (uint8_t map_row = 0; map_row < DEVICE_SCREEN_HEIGHT; map_row++) {
 
-        if (duck_io_printer_type() == DUCK_IO_PRINTER_TYPE_2_PASS) {
+        // This delay seems to fix periodic skipped tile glitching
+        delay(PRINT_DELAY_BETWEEN_ROWS_1000MSEC);
+
+        if (printer_type == DUCK_IO_PRINTER_TYPE_2_PASS) {
             // First bitplane, fail out if there was a problem
             prepare_tile_row(map_row, BITPLANE_0);
-            if (duck_io_send_tile_row_2pass(BITPLANE_0) == false) return false;
-            // Second bitplane
-            prepare_tile_row(map_row, BITPLANE_1);
-            if (duck_io_send_tile_row_2pass(BITPLANE_1) == false) return false;
-        } else {
+            return_status = duck_io_send_tile_row_2pass(BITPLANE_0);
+
+            if (return_status != false) {
+                // Second bitplane
+                prepare_tile_row(map_row, BITPLANE_1);
+                return_status =  duck_io_send_tile_row_2pass(BITPLANE_1);
+            }
+        }
+        else if (printer_type == DUCK_IO_PRINTER_TYPE_1_PASS) {
             // First bitplane, fail out if there was a problem
             prepare_tile_row(map_row, BITPLANE_BOTH);
-            if (duck_io_send_tile_row_1pass() == false) return false;
+            return_status = duck_io_send_tile_row_1pass();
         }
+
+        // Quit printing if there was an error
+        if (return_status == false) break;
     }
-    return true;
+
+    // Print N blank rows to scroll the printed result up
+    for (uint8_t blank_row=0u; blank_row < PRINT_NUM_BLANK_ROWS_AT_END; blank_row++) {
+        delay(PRINT_DELAY_BETWEEN_ROWS_1000MSEC);
+        print_blank_row(printer_type);
+    }
+
+    // One final delay to allow the printer to finish processing
+    // the last row sent. If this isn't done and a keyboard poll
+    // is sent immediately after, it seems the peripheral
+    // controller may trigger a cpu reset.
+    delay(PRINT_DELAY_BETWEEN_ROWS_1000MSEC);
+
+    // Restore VBlank interrupt
+    set_interrupts(int_enables_saved);
+
+    return return_status;
+}
+
+
+static bool print_blank_row(uint8_t printer_type) {
+
+    // Fill print buffer with zero's
+    uint8_t * p_buf = tile_row_buffer;
+    for (uint8_t c = 0u; c < (DEVICE_SCREEN_WIDTH * BYTES_PER_PRINTER_TILE); c++) {
+        *p_buf++ = 0x00u;
+    }
+
+    bool return_status = true;
+
+    if (printer_type == DUCK_IO_PRINTER_TYPE_2_PASS) {
+        return_status = duck_io_send_tile_row_2pass(BITPLANE_0);
+        if (return_status != false)
+            return_status =  duck_io_send_tile_row_2pass(BITPLANE_1);
+    }
+    else if (printer_type == DUCK_IO_PRINTER_TYPE_1_PASS)
+        return_status = duck_io_send_tile_row_1pass();
+
+    return return_status;
 }
 
 
@@ -203,7 +294,7 @@ static bool duck_io_send_tile_row_2pass(uint8_t tile_bitplane_offset) {
         for (uint8_t c = 0u; c < (duck_io_tx_buf_len - reserved_packet_end_bytes); c++)
             duck_io_tx_buf[c] = *p_row_buffer++;
 
-        if (!duck_io_send_cmd_and_buffer(DUCK_IO_CMD_PRINT_SEND_BYTES))
+        if (!print_send_command_and_buffer_delay_1msec_10x_retry(DUCK_IO_CMD_PRINT_SEND_BYTES))
             return false; // Fail out if there was a problem
     }
 
@@ -227,7 +318,7 @@ static bool duck_io_send_tile_row_1pass(void) {
         for (uint8_t c = 0u; c < (duck_io_tx_buf_len); c++)
             duck_io_tx_buf[c] = *p_row_buffer++;
 
-        if (!duck_io_send_cmd_and_buffer(DUCK_IO_CMD_PRINT_SEND_BYTES))
+        if (!print_send_command_and_buffer_delay_1msec_10x_retry(DUCK_IO_CMD_PRINT_SEND_BYTES))
             return false; // Fail out if there was a problem
     }
 
@@ -245,7 +336,6 @@ static bool duck_io_send_tile_row_1pass(void) {
     }
 
     // Wait for last bulk data ACK (with 1msec delay for unknown reason)
-    delay(1);
     duck_io_read_byte_with_msecs_timeout(PRINT_ROW_END_ACK_WAIT_TIMEOUT_200MSEC);
     
     // End of row: wait for Carriage Return confirmation ACK from the printer
