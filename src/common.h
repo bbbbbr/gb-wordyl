@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define vsync wait_vbl_done
+
 // Controls whether debug test code is compiled
 // It dumps dictionary testing output into the emu debug console
 // Takes up about 1300-1400K, so keep it turned off unless needed
