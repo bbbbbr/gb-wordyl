@@ -74,6 +74,7 @@ endif
 # MD0 cart with SRAM (aka, picoDuck flashcart or Duck Laptop with Memory card
 ifeq ($(CART_TYPE),md0_sram)
 	TARGETS=megaduck
+	PLAT_SUB_EXT=.md0
 endif
 
 
@@ -133,7 +134,7 @@ RESDIR      = res
 BINDIR      = build/$(EXT)/$(CART_TYPE)
 MKDIRS      = $(OBJDIR) $(BINDIR) # See bottom of Makefile for directory auto-creation
 
-BINS	      = $(OBJDIR)/$(PROJECTNAME).$(EXT)
+BINS	      = $(OBJDIR)/$(PROJECTNAME).$(EXT)$(PLAT_SUB_EXT)
 CSOURCES      = $(foreach dir,$(SRCDIR),$(notdir $(wildcard $(dir)/*.c)))
 CSOURCES      += $(foreach dir,$(RESDIR),$(notdir $(wildcard $(dir)/*.c)))
 CSOURCES      += $(foreach dir,$(SFXDIR),$(notdir $(wildcard $(dir)/*.c)))
@@ -216,7 +217,7 @@ $(OBJDIR)/%.s:	$(SRCDIR)/%.c
 
 # Link the compiled object files into a .gb ROM file
 $(BINS):	$(OBJS)
-	$(LCC) $(LCCFLAGS) $(CFLAGS) -o $(BINDIR)/$(PROJECTNAME).$(EXT) $(OBJS)
+	$(LCC) $(LCCFLAGS) $(CFLAGS) -o $(BINDIR)/$(PROJECTNAME).$(EXT)$(PLAT_SUB_EXT) $(OBJS)
 
 
 langs:
@@ -254,12 +255,19 @@ carts:
 	${MAKE} CART_TYPE=32k_nosave langs
 	${MAKE} CART_TYPE=md0_sram langs
 
-
 carts-clean:
 	${MAKE} CART_TYPE=31k_1kflash langs-clean
 	${MAKE} CART_TYPE=mbc5 langs-clean
 	${MAKE} CART_TYPE=32k_nosave langs-clean
 	${MAKE} CART_TYPE=md0_sram langs-clean
+
+duck-carts:
+	${MAKE} CART_TYPE=32k_nosave TARGETS=megaduck langs
+	${MAKE} CART_TYPE=md0_sram TARGETS=megaduck langs
+
+duck-carts-clean:
+	${MAKE} CART_TYPE=32k_nosave TARGETS=megaduck langs-clean
+	${MAKE} CART_TYPE=md0_sram TARGETS=megaduck langs-clean
 
 
 dictionaries: langs-compress
