@@ -7,7 +7,7 @@ LCC = $(GBDK_HOME)bin/lcc
 PNG2ASSET = $(GBDK_HOME)bin/png2asset
 GBCOMPRESS = $(GBDK_HOME)bin/gbcompress
 
-VERSION=1.0.6
+VERSION=1.0.7
 
 # Alternate languages can be passed in as follows
 # de en es fr it nl pt-br
