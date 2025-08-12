@@ -45,11 +45,13 @@
         "AUTO FILL:\n" \
         "  ESC.SALDIA\n" \
         "\n" \
+        "DRUCK.PRINT SCRN\n" \
+        "\n" \
         "PRESS ANY KEY"
 
 #else
 
-    #define INTRO_DIALOG_WIN_Y DIALOG_TEXT_HEIGHT_LINES(12)
+    #define INTRO_DIALOG_WIN_Y DIALOG_TEXT_HEIGHT_LINES(14)
     #define __INTRO_MESSAGE_STR \
     /*  |------------------| Available space (18 chars wide) */\
         "LANGUAGE ...... " STR(LANG_CODE) "\n" \
@@ -77,6 +79,8 @@
         "\n" \
         "AUTO FILL:\n" \
         "  ESC.SALDIA\n" \
+        "\n" \
+        "DRUCK.PRINT SCRN\n" \
         "\n" \
         "PRESS ANY KEY"
 #endif

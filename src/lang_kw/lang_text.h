@@ -13,7 +13,7 @@
 // Meur ras dhe Niwlen Ster, Kamm Cam ha Dyski Kernowek Discord
 
 #undef INTRO_DIALOG_WIN_Y
-#define INTRO_DIALOG_WIN_Y DIALOG_TEXT_HEIGHT_LINES(14)
+#define INTRO_DIALOG_WIN_Y DIALOG_TEXT_HEIGHT_LINES(15)
 #undef __INTRO_MESSAGE_STR
 #define __INTRO_MESSAGE_STR \
 /*  |------------------| Available space (18 chars wide) */\
@@ -46,6 +46,8 @@
     "\n" \
     "OMLENWEL:\n" \
     "  ESC.SALDIA\n" \
+    "\n" \
+    "DRUCK.PRINT SCRN\n" \
     "\n" \
     "GWASK BOTON\n"\
     "HA DALLETH"\

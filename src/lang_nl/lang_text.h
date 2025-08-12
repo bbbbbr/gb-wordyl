@@ -46,6 +46,8 @@
     "AUTO AANVULLEN:\n" \
     "  ESC.SALDIA\n" \
     "\n" \
+    "DRUCK.PRINT SCRN\n" \
+    "\n" \
     "DRUK OP EEN KNOP"
 
 // #undef HELP_LEGEND_MAP_Y

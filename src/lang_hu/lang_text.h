@@ -45,6 +45,8 @@
     "AUTOM. KITOLTES:\n" \
     "  ESC.KILEPES\n" \
     "\n" \
+    "DRUCK.PRINT SCRN\n" \
+    "\n" \
     "NYOMJ EGY GOMBOT"
 
 

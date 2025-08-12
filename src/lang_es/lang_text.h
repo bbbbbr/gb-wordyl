@@ -46,6 +46,8 @@
     "AUTORELLENAR:\n" \
     "  ESC.SALDIA\n" \
     "\n" \
+    "DRUCK.PRINT SCRN\n" \
+    "\n" \
     "PULSA OTRA TECLA"
 
 

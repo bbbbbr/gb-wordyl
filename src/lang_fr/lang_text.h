@@ -45,6 +45,8 @@
     "REMPLISSAGE AUTO:\n" \
     "  ESC.QUITTER\n" \
     "\n" \
+    "DRUCK.PRINT SCRN\n" \
+    "\n" \
     "PRESSEZ UN TOUCHE"
 
 

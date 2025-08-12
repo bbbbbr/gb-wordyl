@@ -48,6 +48,8 @@
     "COPIAR ACERTOS:\n" \
     "  ESC.SALDIA\n" \
     "\n" \
+    "DRUCK.PRINT SCRN\n" \
+    "\n" \
     "APERTE A PARA\n" \
     "  JOGAR"
 
