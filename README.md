@@ -22,6 +22,11 @@ Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
 ### Special MegaDuck Features
   - Physical Keyboard support for the CEFA Super QuiQue and Hartung Super Junior Computer models
   - Print Screen almost anywhere in the game using the Mega Duck printer for the laptop models
+  - To run in an emulator use https://github.com/bbbbbr/SuperJuniorSameDuck
+    - Example of how to run it: `superjunior_sameduck --duck-printer-1pass gb-wordyl_1.0.7_md0_sram_en.duck.md0`
+    - Replace `_en_` with the desired language code
+    - Use the `F12` key to enable the keyboard
+    - Use the `Scroll Lock` key to print
 
 ### Features
   - Game stats: Won, Lost, Streak & Win Percentage
