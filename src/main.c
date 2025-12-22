@@ -42,6 +42,10 @@
     #include "decode.h"
 #endif
 
+#if defined(SPLASH_LAURELS)
+    #include "laurels/splash_laurels_screen.h"
+#endif
+
 #if defined(CART_31k_1kflash)
     #include "cart_31k_1kflash/logo_splash_ferrante_skullcat.h"
 #elif defined(CART_md0_sram)
@@ -85,6 +89,10 @@ void main(void) {
     DISPLAY_ON;
 
     cgb_check_and_init();
+
+    #if defined(SPLASH_LAURELS)
+        splash_laurels_1k_show();
+    #endif
 
     #if defined(CART_31k_1kflash)
         // Call before gfx_load() since it will overwrite other tile data
