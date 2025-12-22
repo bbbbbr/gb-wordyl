@@ -33,6 +33,13 @@ endif
 #	CART_TYPE=md0_sram
 endif
 
+# Special 1k Laurels club build (see: make laurels)
+# SPLASH_LAURELS=_LAURELS
+
+ifdef SPLASH_LAURELS
+	CFLAGS += -DSPLASH_LAURELS
+endif
+
 CFLAGS += -DLANG_CODE=$(LANG_CODE)
 CFLAGS += -DCART_$(CART_TYPE)
 # CFLAGS += -Wf--max-allocs-per-node50000
@@ -105,7 +112,7 @@ LCCFLAGS += -debug # Uncomment to enable debug output
 
 
 # You can set the name of the ROM file here
-PROJECTNAME = gb-wordyl_$(VERSION)_$(CART_TYPE)_$(LANG_CODE)
+PROJECTNAME = gb-wordyl_$(VERSION)_$(CART_TYPE)_$(LANG_CODE)$(SPLASH_LAURELS)
 
 CFLAGS += -debug
 CFLAGS += -Wf-MMD -Wf-Wp-MP
@@ -113,7 +120,9 @@ CFLAGS += -Wf-MMD -Wf-Wp-MP
 CFLAGS += -Wf-I"$(CART_TYPE_DIR)/"
 # Add language directory to include path
 CFLAGS += -Wf-I"$(LANGDIR)/"
-
+ifdef SPLASH_LAURELS
+	CFLAGS += -Wf-I"$(SPLASH_LAURELS_DIR)/"
+endif
 
 # Code size improvements continue to show up to 250000
 # 15000 seems to balance code size improvements vs compile time
@@ -124,6 +133,7 @@ SRCDIR         = src
 SFXDIR         = $(SRCDIR)/sfx
 LANGDIR        = $(SRCDIR)/lang_$(LANG_CODE)
 CART_TYPE_DIR  = $(SRCDIR)/cart_$(CART_TYPE)
+SPLASH_LAURELS_DIR  = $(SRCDIR)/laurels
 SGBDIR         = $(SRCDIR)/sgb
 MEGADUCK_LAPTOP = $(SRCDIR)/megaduck_laptop
 
@@ -154,12 +164,19 @@ endif
 CSOURCES_LANG = $(foreach dir,$(LANGDIR),$(notdir $(wildcard $(dir)/*.c)))
 CSOURCES_CART = $(foreach dir,$(CART_TYPE_DIR),$(notdir $(wildcard $(dir)/*.c)))
 
+ifdef SPLASH_LAURELS
+	CSOURCES_LAURELS = $(foreach dir,$(SPLASH_LAURELS_DIR),$(notdir $(wildcard $(dir)/*.c)))
+endif
+
 ASMSOURCES      = $(foreach dir,$(SRCDIR),$(notdir $(wildcard $(dir)/*.s)))
 ASMSOURCES_CART = $(foreach dir,$(CART_TYPE_DIR),$(notdir $(wildcard $(dir)/*.s)))
 
 OBJS        = $(CSOURCES:%.c=$(OBJDIR)/%.o)
 OBJS        += $(CSOURCES_LANG:%.c=$(OBJDIR)/%.o)
 OBJS        += $(CSOURCES_CART:%.c=$(OBJDIR)/%.o)
+ifdef SPLASH_LAURELS	
+	OBJS        += $(CSOURCES_LAURELS:%.c=$(OBJDIR)/%.o)
+endif
 
 OBJS        += $(ASMSOURCES:%.s=$(OBJDIR)/%.o)
 OBJS        += $(ASMSOURCES_CART:%.s=$(OBJDIR)/%.o)
@@ -200,6 +217,12 @@ $(OBJDIR)/%.o:	$(LANGDIR)/%.c
 $(OBJDIR)/%.o:	$(CART_TYPE_DIR)/%.c
 	$(LCC) $(CFLAGS) -c -o $@ $<
 
+ifdef SPLASH_LAURELS
+# Compile .c files in "src/<CART_TYPE_DIR>/" to .o object files
+$(OBJDIR)/%.o:	$(SPLASH_LAURELS_DIR)/%.c
+	$(LCC) $(CFLAGS) -c -o $@ $<
+endif
+
 # Compile .s assembly files in "src/" to .o object files
 $(OBJDIR)/%.o:	$(CART_TYPE_DIR)/%.s
 	$(LCC) $(CFLAGS) -c -o $@ $<
@@ -219,6 +242,9 @@ $(OBJDIR)/%.s:	$(SRCDIR)/%.c
 $(BINS):	$(OBJS)
 	$(LCC) $(LCCFLAGS) $(CFLAGS) -o $(BINDIR)/$(PROJECTNAME).$(EXT)$(PLAT_SUB_EXT) $(OBJS)
 
+
+laurels:
+	${MAKE} SPLASH_LAURELS=_LAURELS
 
 langs:
 	${MAKE} LANG_CODE=de    CART_TYPE=$(CART_TYPE)
