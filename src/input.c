@@ -48,6 +48,18 @@ void waitpadreleased_lowcpu(uint8_t button_mask) {
                 }
             }
         } while (KEY_PRESSED(button_mask));
+    #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+        bool keyboard_pressed = false;
+
+        do {
+            UPDATE_KEYS();
+            vsync();
+
+            keyboard_pressed = (key_pressed != NO_KEY);
+            if (platform_keyboard_poll()) {
+                keyboard_pressed = (key_pressed != NO_KEY);
+            }
+        } while (KEY_PRESSED(button_mask) || keyboard_pressed);
     #else
         while (joypad() & button_mask) {
             vsync();
@@ -107,6 +119,18 @@ void waitpadticked_lowcpu(uint8_t button_mask) {
                         keyboard_checked = true;
                     }
                 }
+            }
+        #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+            if (platform_keyboard_poll()) {
+
+                // Prevent passing through any key press by flagging the press
+                // and then returning once a new keyboard key is pressed.
+                if (keyboard_checked) {
+                    if ((key_pressed) && (!key_previous))
+                        return;
+                }
+
+                keyboard_checked = true;
             }
         #endif
     };

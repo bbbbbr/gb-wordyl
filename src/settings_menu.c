@@ -261,7 +261,39 @@ void menu_run(void) {
                                               break; // redundant
                     }
                 }
-            }            
+            }
+        #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+            if (platform_keyboard_poll()) {
+                switch (key_pressed) {
+                    case ' ':           // Fall through, same as Enter
+                    case KEY_ENTER:     // Apply action for current menu item
+                                        // If it has a variable, invert it and redraw
+                                        if (p_menu_vars[menu_idx])
+                                            settings_menu_change_var(p_menu_vars[menu_idx]);
+
+                                        // If it has a function, exit the menu and call it
+                                        if (menu_funcs[menu_idx] || (menu_idx == MENU_DEFAULT_EXIT)) {
+                                            // Hide the cursor here so that it doesn't show
+                                            // while the popup window is retracting
+                                            menu_hide_cursor();
+                                            return;
+                                        }
+                                        break;
+
+                    case KEY_ARROW_UP:   menu_update_cursor(MENU_MOVE_UP);
+                                         break;
+                    case KEY_ARROW_DOWN: menu_update_cursor(MENU_MOVE_DOWN);
+                                         break;
+
+
+                    case KEY_ESCAPE:      // Fall through, same as Backspace
+                    case KEY_BACKSPACE:   // Use B to exit the menu regardless of where the cursor is
+                                          menu_idx = MENU_DEFAULT_EXIT;
+                                          menu_hide_cursor();
+                                          return;
+                                          break; // redundant
+                }
+            }
         #endif
 
         UPDATE_KEYS();
@@ -297,6 +329,4 @@ void menu_run(void) {
         }
     }
 }
-
-
 

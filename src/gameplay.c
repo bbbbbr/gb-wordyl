@@ -351,6 +351,51 @@ void gameplay_run(void)
                     }
                 }
             }
+        #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+            if (platform_keyboard_poll()) {
+
+                switch (key_pressed) {
+                    case NO_KEY: break;
+
+                    case KEY_HELP:        settings_menu_show();              break;
+                    case KEY_ENTER:       gameplay_handle_guess();           break;
+                    case KEY_ESCAPE:      board_autofill_matched_letters();  break;
+                    case KEY_ARROW_LEFT:
+                                          if (guess_letter_cursor > LETTER_CURSOR_START) {
+                                              guess_letter_cursor--;
+                                              play_sfx(SFX_CURSOR_MOVE);
+                                              board_update_letter_cursor();
+                                          }
+                                          break;
+
+                    case KEY_ARROW_RIGHT:
+                                          if (guess_letter_cursor < LETTER_CURSOR_MAX) {
+                                              guess_letter_cursor++;
+                                              play_sfx(SFX_CURSOR_MOVE);
+                                              board_update_letter_cursor();
+                                          }
+                                          break;
+
+                    case KEY_DELETE:
+                    case KEY_BACKSPACE:
+                                          play_sfx(SFX_TILE_REMOVE);
+                                          board_remove_guess_letter();
+                                          board_update_letter_cursor();
+                                          break;
+
+                    default:
+                             if ((key_pressed >= 'a') && (key_pressed <= 'z'))
+                                    key_pressed -= ('a' - 'A');
+
+                             if ( (key_pressed >= 'A') && (key_pressed <= 'Z')) {
+                                play_sfx(SFX_TILE_ADD);
+                                board_add_guess_letter(key_pressed);
+                                board_update_letter_cursor();
+                             }
+                             break;
+
+                }
+            }
         #endif
 
         UPDATE_KEYS();
