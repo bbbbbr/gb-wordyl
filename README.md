@@ -40,6 +40,7 @@ Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
     - Deutsch (DE), English (EN), Español (ES), Français (FR), Italiano (IT), Nederlands (NL), Latin (LA), Português Brasileiro (PT-BR), Cornish (KW), català (CA)
     - No words with special chars, just English A-Z letters
     - Translated UI text for Deutsch (DE), English (EN), Español (ES), Français (FR), Nederlands (NL), Português Brasileiro (PT-BR), Cornish (KW), català (CA)
+    - Inside Gadgets USB Keyboard link adapter Support (Game Boy)
 
 ### Controls:
   - A: Add Letter
@@ -76,12 +77,13 @@ Language / UI Translation credits:
 Additional code and contributions from:
   - Eucal.BB : Help with Megaduck Laptop testing and research
   - Mancloud : Help with Megaduck Laptop research and Mega Duck printer hardware
-  - Daeo : Cart and box Graphics
+  - Daeo : Cart and box Graphics  
   - [Coffee "Valen" Bat](https://twitter.com/cofebbat) : Game Sound FX and [CBTFX Driver](https://github.com/datguywitha3ds/CBT-FX)
   - [toxa](https://github.com/untoxa/) : Ferrante Crafts 31k ROM + 1k Flash cart support
   - [arpruss](https://github.com/arpruss/gb-fiver) : Highlighting fixes, Improved Dictionary compression and lookup speed
   - [zeta_two](https://github.com/ZetaTwo/) : Previous dictionary compression
   - [stacksmashing](https://github.com/stacksmashing/) : original base code (mostly now rewritten)
+  - Keith Conger : Inside Gadgets USB Keyboard link adapter Support
 
 Built using [GBDK-2020](https://github.com/gbdk-2020/gbdk-2020) (4.2.0)
 
