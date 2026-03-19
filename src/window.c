@@ -19,7 +19,6 @@
     #include "megaduck_laptop/megaduck_keyboard.h"
 #endif
 
-
 // Var for calling a function from within the popup window
 void (*p_win_func_run)(void) = NULL;
 bool win_restore_sprites_after = true;
@@ -112,9 +111,11 @@ uint8_t win_dialog_show_message(uint8_t win_y_moveto, uint8_t * str_1, uint8_t *
                 ret_keys_ticked = DIALOG_CONFIRM_BUTTON;
             }
         }
+    #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+        if (key_pressed == KEY_ARROW_UP) {
+            ret_keys_ticked = DIALOG_CONFIRM_BUTTON;
+        }
     #endif
 
     return ret_keys_ticked;
 }
-
-

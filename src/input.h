@@ -6,6 +6,8 @@
 #if (defined(MEGADUCK))
     #include <duck/laptop_io.h>
     #include "megaduck_laptop/megaduck_keyboard.h"
+#elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET))
+    #include "platform_keyboard.h"
 #endif
 
 #define J_ANY_KEY           0xFFu
@@ -51,5 +53,3 @@ extern uint8_t key_repeat_count;
 #endif
 
 #endif // INPUT_H
-
-

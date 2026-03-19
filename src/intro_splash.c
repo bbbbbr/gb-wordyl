@@ -357,6 +357,18 @@ void splash_animate_title(void) {
                     }
                 }
             }
+        #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+            if (platform_keyboard_poll()) {
+
+                // Prevent passing through any key press by flagging the press
+                // and then returning once no keys are pressed
+                if (key_pressed) {
+                    skip_anim = true;
+                    // Don't use play_sfx() since that checks if sound is enabled
+                    // 1) Don't want to gate by that, 2) options haven't yet been loaded from Flash ROM / SRAM
+                    CBTFX_init(SFX_list[(SFX_TILE_REVEAL_RESULT)]);
+                }
+            }
         #endif
 
         // Don't show letter flip animation for space chars
