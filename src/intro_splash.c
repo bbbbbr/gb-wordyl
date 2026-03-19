@@ -335,40 +335,34 @@ void splash_animate_title(void) {
             CBTFX_init(SFX_list[(SFX_TILE_REVEAL_RESULT)]);
         }
 
-        #if defined(MEGADUCK)
-            // Poll for keyboard keys every other frame
-            // (Polling intervals below 20ms may cause keyboard lockup)
-            // The usual (sys_time & 0x01u) doesn't work here due to some of the loop timing
-            // so use 2 x vsync to ensure enough time has elapsed instead
-            vsync();
-            vsync();
-            if (megaduck_laptop_detected) {
+        #if !defined(CART_31k_1kflash)
 
-                if (duck_io_poll_keyboard(&keydata)) {
-                    duck_io_process_key_data(&keydata, megaduck_model);
+            #if defined(MEGADUCK)
+                // Poll for keyboard keys every other frame
+                // (Polling intervals below 20ms may cause keyboard lockup)
+                // The usual (sys_time & 0x01u) doesn't work here due to some of the loop timing
+                // so use 2 x vsync to ensure enough time has elapsed instead
+                vsync();
+                vsync();
+                if (megaduck_laptop_detected) {
+                    if (duck_io_poll_keyboard(&keydata)) {
+                        duck_io_process_key_data(&keydata, megaduck_model);
 
-                    // Prevent passing through any key press by flagging the press
-                    // and then returning once no keys are pressed
-                    if (key_pressed) {
-                        skip_anim = true;
-                        // Don't use play_sfx() since that checks if sound is enabled
-                        // 1) Don't want to gate by that, 2) options haven't yet been loaded from Flash ROM / SRAM
-                        CBTFX_init(SFX_list[(SFX_TILE_REVEAL_RESULT)]);
+            #else // Implied: if (defined(GAMEBOY) || defined(ANALOGUEPOCKET))
+                if (platform_keyboard_poll()) {
+                    {  // Extra brace for compat with duck version brace count
+            #endif
+                            
+                        // Prevent passing through any key press by flagging the press
+                        // and then returning once no keys are pressed
+                        if (key_pressed) {
+                            skip_anim = true;
+                            // Don't use play_sfx() since that checks if sound is enabled
+                            // 1) Don't want to gate by that, 2) options haven't yet been loaded from Flash ROM / SRAM
+                            CBTFX_init(SFX_list[(SFX_TILE_REVEAL_RESULT)]);
+                        }
                     }
                 }
-            }
-        #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
-            if (platform_keyboard_poll()) {
-
-                // Prevent passing through any key press by flagging the press
-                // and then returning once no keys are pressed
-                if (key_pressed) {
-                    skip_anim = true;
-                    // Don't use play_sfx() since that checks if sound is enabled
-                    // 1) Don't want to gate by that, 2) options haven't yet been loaded from Flash ROM / SRAM
-                    CBTFX_init(SFX_list[(SFX_TILE_REVEAL_RESULT)]);
-                }
-            }
         #endif
 
         // Don't show letter flip animation for space chars

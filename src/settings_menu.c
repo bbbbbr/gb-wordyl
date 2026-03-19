@@ -210,6 +210,60 @@ static void settings_menu_render_text(void) {
 }
 
 
+
+static bool menu_handle_keyboard(void) {
+
+    #if !defined(CART_31k_1kflash)
+
+        #if defined(MEGADUCK)
+            // Poll for keyboard keys every other frame
+            // (Polling intervals below 20ms may cause keyboard lockup)
+            if ((sys_time & 0x01u) && (megaduck_laptop_detected)) {
+                if (duck_io_poll_keyboard(&keydata)) {
+                    duck_io_process_key_data(&keydata, megaduck_model);
+
+        #else // implied: #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET))
+            if (platform_keyboard_poll()) {
+                { // Extra brace for compat with duck version brace count
+        #endif
+                    switch (key_pressed) {
+                        case ' ':           // Fall through, same as Enter
+                        case KEY_ENTER:     // Apply action for current menu item
+                                            // If it has a variable, invert it and redraw
+                                            if (p_menu_vars[menu_idx])
+                                                settings_menu_change_var(p_menu_vars[menu_idx]);
+
+                                            // If it has a function, exit the menu and call it
+                                            if (menu_funcs[menu_idx] || (menu_idx == MENU_DEFAULT_EXIT)) {
+                                                // Hide the cursor here so that it doesn't show
+                                                // while the popup window is retracting
+                                                menu_hide_cursor();
+                                                return true;
+                                            }
+                                            break;
+
+                        case KEY_ARROW_UP:   menu_update_cursor(MENU_MOVE_UP);
+                                             break;
+                        case KEY_ARROW_DOWN: menu_update_cursor(MENU_MOVE_DOWN);
+                                             break;
+
+
+                        case KEY_ESCAPE:      // Fall through, same as Backspace
+                        case KEY_BACKSPACE:   // Use B to exit the menu regardless of where the cursor is
+                                              menu_idx = MENU_DEFAULT_EXIT;
+                                              menu_hide_cursor();
+                                              return true;
+                                              break; // redundant
+                    }
+                }
+            }
+
+    #endif // #if !defined(CART_31k_1kflash
+    return false;
+}
+
+
+
 // Small loop that runs from within the popup menu
 // which moves the cursor around and accepts selections
 void menu_run(void) {
@@ -224,77 +278,7 @@ void menu_run(void) {
 
         vsync();
 
-        #if defined(MEGADUCK)
-            // Poll for keyboard keys every other frame
-            // (Polling intervals below 20ms may cause keyboard lockup)
-            if ((sys_time & 0x01u) && (megaduck_laptop_detected)) {
-                if (duck_io_poll_keyboard(&keydata)) {
-                    duck_io_process_key_data(&keydata, megaduck_model);
-
-                    switch (key_pressed) {
-                        case ' ':           // Fall through, same as Enter
-                        case KEY_ENTER:     // Apply action for current menu item
-                                            // If it has a variable, invert it and redraw
-                                            if (p_menu_vars[menu_idx])
-                                                settings_menu_change_var(p_menu_vars[menu_idx]);
-
-                                            // If it has a function, exit the menu and call it
-                                            if (menu_funcs[menu_idx] || (menu_idx == MENU_DEFAULT_EXIT)) {
-                                                // Hide the cursor here so that it doesn't show
-                                                // while the popup window is retracting
-                                                menu_hide_cursor();
-                                                return;
-                                            }
-                                            break;
-
-                        case KEY_ARROW_UP:   menu_update_cursor(MENU_MOVE_UP);
-                                             break;
-                        case KEY_ARROW_DOWN: menu_update_cursor(MENU_MOVE_DOWN);
-                                             break;
-
-
-                        case KEY_ESCAPE:      // Fall through, same as Backspace
-                        case KEY_BACKSPACE:   // Use B to exit the menu regardless of where the cursor is
-                                              menu_idx = MENU_DEFAULT_EXIT;
-                                              menu_hide_cursor();
-                                              return;
-                                              break; // redundant
-                    }
-                }
-            }
-        #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
-            if (platform_keyboard_poll()) {
-                switch (key_pressed) {
-                    case ' ':           // Fall through, same as Enter
-                    case KEY_ENTER:     // Apply action for current menu item
-                                        // If it has a variable, invert it and redraw
-                                        if (p_menu_vars[menu_idx])
-                                            settings_menu_change_var(p_menu_vars[menu_idx]);
-
-                                        // If it has a function, exit the menu and call it
-                                        if (menu_funcs[menu_idx] || (menu_idx == MENU_DEFAULT_EXIT)) {
-                                            // Hide the cursor here so that it doesn't show
-                                            // while the popup window is retracting
-                                            menu_hide_cursor();
-                                            return;
-                                        }
-                                        break;
-
-                    case KEY_ARROW_UP:   menu_update_cursor(MENU_MOVE_UP);
-                                         break;
-                    case KEY_ARROW_DOWN: menu_update_cursor(MENU_MOVE_DOWN);
-                                         break;
-
-
-                    case KEY_ESCAPE:      // Fall through, same as Backspace
-                    case KEY_BACKSPACE:   // Use B to exit the menu regardless of where the cursor is
-                                          menu_idx = MENU_DEFAULT_EXIT;
-                                          menu_hide_cursor();
-                                          return;
-                                          break; // redundant
-                }
-            }
-        #endif
+        if (menu_handle_keyboard()) return;
 
         UPDATE_KEYS();
         UPDATE_KEYS_TICKED();

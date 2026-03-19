@@ -276,34 +276,27 @@ void gameplay_restart(void) {
 }
 
 
-// Runs the main gameplay: word entry, answer checking, messaging
-void gameplay_run(void)
-{
-    bool keys_select_consumed = false;
-    uint8_t menu_select_count = 0;
 
-    // make sure all keys are released before starting gameplay
-    waitpadreleased_lowcpu(J_ANY_KEY);
+static void handle_keyboard(void) {
 
-    while(game_state == GAME_STATE_RUNNING) {
-        vsync();
-
+    #if !defined(CART_31k_1kflash) // No ROM space on the 31k+1k cart for keyboard support
 
         #if defined(MEGADUCK)
             // Poll for keyboard keys every other frame
             // (Polling intervals below 20ms may cause keyboard lockup)
-            if ((sys_time & 0x01u) && (megaduck_laptop_detected)) {
-                if (duck_io_poll_keyboard(&keydata)) {
+            if ((sys_time & 0x01u) && (megaduck_laptop_detected))
+            {
+                if (duck_io_poll_keyboard(&keydata))
+                {
                     duck_io_process_key_data(&keydata, megaduck_model);
+        #else // Implied: if (defined(GAMEBOY) || defined(ANALOGUEPOCKET))
+            if (platform_keyboard_poll()) {
+                { // Extra brace for compat with duck version brace count
+        #endif
 
                     switch (key_pressed) {
                         case NO_KEY: break;
 
-                        // case KEY_ARROW_UP:    keyboard_move_cursor(J_UP);    break;
-                        // case KEY_ARROW_DOWN:  keyboard_move_cursor(J_DOWN);  break;
-                        // case KEY_ARROW_LEFT:  keyboard_move_cursor(J_LEFT);  break;
-                        // case KEY_ARROW_RIGHT: keyboard_move_cursor(J_RIGHT); break;
-                        // case KEY_SPACE:       // TODO: use to add tile from on-screen keyboard?
                         case KEY_HELP:        settings_menu_show();              break;
                         case KEY_ENTER:       gameplay_handle_guess();           break;
                         case KEY_ESCAPE:      board_autofill_matched_letters();  break;
@@ -331,9 +324,11 @@ void gameplay_run(void)
                                               board_update_letter_cursor();
                                               break;
 
+                        #if defined(MEGADUCK)
                         case KEY_PRINTSCREEN:
                                               duck_print_screen();
                                               break;
+                        #endif
 
                         default: // Try to add a letter from the keyboard
                                  // Force a-z lowercase to upper-case
@@ -351,52 +346,24 @@ void gameplay_run(void)
                     }
                 }
             }
-        #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
-            if (platform_keyboard_poll()) {
 
-                switch (key_pressed) {
-                    case NO_KEY: break;
+    #endif  // !defined(CART_31k_1kflash)
+}
 
-                    case KEY_HELP:        settings_menu_show();              break;
-                    case KEY_ENTER:       gameplay_handle_guess();           break;
-                    case KEY_ESCAPE:      board_autofill_matched_letters();  break;
-                    case KEY_ARROW_LEFT:
-                                          if (guess_letter_cursor > LETTER_CURSOR_START) {
-                                              guess_letter_cursor--;
-                                              play_sfx(SFX_CURSOR_MOVE);
-                                              board_update_letter_cursor();
-                                          }
-                                          break;
 
-                    case KEY_ARROW_RIGHT:
-                                          if (guess_letter_cursor < LETTER_CURSOR_MAX) {
-                                              guess_letter_cursor++;
-                                              play_sfx(SFX_CURSOR_MOVE);
-                                              board_update_letter_cursor();
-                                          }
-                                          break;
+// Runs the main gameplay: word entry, answer checking, messaging
+void gameplay_run(void)
+{
+    bool keys_select_consumed = false;
+    uint8_t menu_select_count = 0;
 
-                    case KEY_DELETE:
-                    case KEY_BACKSPACE:
-                                          play_sfx(SFX_TILE_REMOVE);
-                                          board_remove_guess_letter();
-                                          board_update_letter_cursor();
-                                          break;
+    // make sure all keys are released before starting gameplay
+    waitpadreleased_lowcpu(J_ANY_KEY);
 
-                    default:
-                             if ((key_pressed >= 'a') && (key_pressed <= 'z'))
-                                    key_pressed -= ('a' - 'A');
+    while(game_state == GAME_STATE_RUNNING) {
+        vsync();
 
-                             if ( (key_pressed >= 'A') && (key_pressed <= 'Z')) {
-                                play_sfx(SFX_TILE_ADD);
-                                board_add_guess_letter(key_pressed);
-                                board_update_letter_cursor();
-                             }
-                             break;
-
-                }
-            }
-        #endif
+        handle_keyboard();
 
         UPDATE_KEYS();
         UPDATE_KEY_REPEAT(J_DPAD);

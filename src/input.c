@@ -23,12 +23,11 @@ uint8_t keys_ticked;
 uint8_t key_repeat_count = 0x00;
 
 
-// Reduce CPU usage by only checking once per frame
-// Allows a loop control to be passed in
-void waitpadreleased_lowcpu(uint8_t button_mask) {
+#if defined(MEGADUCK)
 
-    #if defined(MEGADUCK)
-        do {
+    static void waitpadreleased_lowcpu_megaduck_keyboard(uint8_t button_mask) {
+
+       do {
             UPDATE_KEYS();
             vsync();
 
@@ -48,9 +47,47 @@ void waitpadreleased_lowcpu(uint8_t button_mask) {
                 }
             }
         } while (KEY_PRESSED(button_mask));
-    #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
-        bool keyboard_pressed = false;
+    }
 
+
+    static bool waitpadticked_lowcpu_megaduck_keyboard(bool * p_keyboard_checked) {
+        // Poll for keyboard keys every other frame
+        // (Polling intervals below 20ms may cause keyboard lockup)
+        if ((sys_time & 0x01u) && (megaduck_laptop_detected)) {
+
+            if (duck_io_poll_keyboard(&keydata)) {
+                duck_io_process_key_data(&keydata, megaduck_model);
+
+                if (key_pressed == KEY_PRINTSCREEN) {
+                    duck_print_screen();
+                    return false; // No exit
+                }
+
+                // Prevent passing through any key press by flagging the press
+                // and then returning once no keys are pressed
+                if (*p_keyboard_checked) {
+                    if ((key_pressed) && (!key_previous))
+                        return true;  // Yes exit
+                }
+
+                // Only register a non-pressed key if key repeat is not active)
+                // (otherwise the gaps between repeated keys might look like non-keypresses
+                if (!(keydata.flags & DUCK_IO_KEY_FLAG_KEY_REPEAT)) {
+                    *p_keyboard_checked = true;
+                }
+            }
+        }
+        return false;  // No exit
+    }
+
+#endif // #if defined(MEGADUCK)
+
+
+#if (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
+
+    static void waitpadreleased_lowcpu_usb_keyboard(uint8_t button_mask) {
+
+        bool keyboard_pressed = false;
         do {
             UPDATE_KEYS();
             vsync();
@@ -60,6 +97,36 @@ void waitpadreleased_lowcpu(uint8_t button_mask) {
                 keyboard_pressed = (key_pressed != NO_KEY);
             }
         } while (KEY_PRESSED(button_mask) || keyboard_pressed);
+    }
+
+
+    static bool waitpadticked_lowcpu_usb_keyboard(bool * p_keyboard_checked) {
+
+        if (platform_keyboard_poll()) {
+            // Prevent passing through any key press by flagging the press
+            // and then returning once a new keyboard key is pressed.
+            if (*p_keyboard_checked) {
+                if ((key_pressed) && (!key_previous))
+                    return true;  // Yes exit
+            }
+
+            *p_keyboard_checked = true;
+        }
+
+        return false; // No exit
+    }
+
+#endif // #if (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
+
+
+// Reduce CPU usage by only checking once per frame
+// Allows a loop control to be passed in
+void waitpadreleased_lowcpu(uint8_t button_mask) {
+
+    #if defined(MEGADUCK)
+        waitpadreleased_lowcpu_megaduck_keyboard(button_mask);
+    #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
+        waitpadreleased_lowcpu_usb_keyboard(button_mask);
     #else
         while (joypad() & button_mask) {
             vsync();
@@ -69,6 +136,7 @@ void waitpadreleased_lowcpu(uint8_t button_mask) {
     UPDATE_KEYS_TICKED();
     UPDATE_KEYS();
 }
+
 
 // Reduce CPU usage by only checking once per frame
 // Allows a loop control to be passed in
@@ -94,44 +162,9 @@ void waitpadticked_lowcpu(uint8_t button_mask) {
         }
 
         #if defined(MEGADUCK)
-            // Poll for keyboard keys every other frame
-            // (Polling intervals below 20ms may cause keyboard lockup)
-            if ((sys_time & 0x01u) && (megaduck_laptop_detected)) {
-
-                if (duck_io_poll_keyboard(&keydata)) {
-                    duck_io_process_key_data(&keydata, megaduck_model);
-
-                    if (key_pressed == KEY_PRINTSCREEN) {
-                        duck_print_screen();
-                        continue;
-                    }
-
-                    // Prevent passing through any key press by flagging the press
-                    // and then returning once no keys are pressed
-                    if (keyboard_checked) {
-                        if ((key_pressed) && (!key_previous))
-                            return;
-                    }
-
-                    // Only register a non-pressed key if key repeat is not active)
-                    // (otherwise the gaps between repeated keys might look like non-keypresses
-                    if (!(keydata.flags & DUCK_IO_KEY_FLAG_KEY_REPEAT)) {
-                        keyboard_checked = true;
-                    }
-                }
-            }
+            if (waitpadticked_lowcpu_megaduck_keyboard(&keyboard_checked)) return;
         #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
-            if (platform_keyboard_poll()) {
-
-                // Prevent passing through any key press by flagging the press
-                // and then returning once a new keyboard key is pressed.
-                if (keyboard_checked) {
-                    if ((key_pressed) && (!key_previous))
-                        return;
-                }
-
-                keyboard_checked = true;
-            }
+            if (waitpadticked_lowcpu_usb_keyboard(&keyboard_checked)) return;
         #endif
     };
 }
