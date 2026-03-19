@@ -6,7 +6,7 @@
 #if (defined(MEGADUCK))
     #include <duck/laptop_io.h>
     #include "megaduck_laptop/megaduck_keyboard.h"
-#elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET))
+#elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
     #include "platform_keyboard.h"
 #endif
 

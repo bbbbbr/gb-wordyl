@@ -48,7 +48,7 @@ void waitpadreleased_lowcpu(uint8_t button_mask) {
                 }
             }
         } while (KEY_PRESSED(button_mask));
-    #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+    #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
         bool keyboard_pressed = false;
 
         do {
@@ -120,7 +120,7 @@ void waitpadticked_lowcpu(uint8_t button_mask) {
                     }
                 }
             }
-        #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+        #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
             if (platform_keyboard_poll()) {
 
                 // Prevent passing through any key press by flagging the press

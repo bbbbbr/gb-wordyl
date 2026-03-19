@@ -351,7 +351,7 @@ void gameplay_run(void)
                     }
                 }
             }
-        #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+        #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
             if (platform_keyboard_poll()) {
 
                 switch (key_pressed) {

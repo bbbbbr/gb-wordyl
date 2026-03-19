@@ -76,7 +76,7 @@ void main(void) {
     #if defined(MEGADUCK)
         megaduck_model = duck_check_model();  // This must be called before any vram tiles are loaded
         megaduck_laptop_detected = duck_io_laptop_init();
-    #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+    #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
         platform_keyboard_init();
     #endif
 

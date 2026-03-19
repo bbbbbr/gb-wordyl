@@ -111,7 +111,7 @@ uint8_t win_dialog_show_message(uint8_t win_y_moveto, uint8_t * str_1, uint8_t *
                 ret_keys_ticked = DIALOG_CONFIRM_BUTTON;
             }
         }
-    #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+    #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
         if (key_pressed == KEY_ARROW_UP) {
             ret_keys_ticked = DIALOG_CONFIRM_BUTTON;
         }

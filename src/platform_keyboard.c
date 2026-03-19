@@ -4,7 +4,9 @@
 
 #include "platform_keyboard.h"
 
-#if !defined(MEGADUCK) && (defined(GAMEBOY) || defined(ANALOGUEPOCKET))
+#if !defined(MEGADUCK)
+
+#if (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
 
 uint8_t platform_key_pressed = NO_KEY;
 uint8_t platform_key_previous = NO_KEY;
@@ -140,4 +142,7 @@ bool platform_keyboard_poll(void) {
 void platform_keyboard_printscreen(void) {
 }
 
-#endif
+
+#endif // (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
+
+#endif // !defined(MEGADUCK)

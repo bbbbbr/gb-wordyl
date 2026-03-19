@@ -357,7 +357,7 @@ void splash_animate_title(void) {
                     }
                 }
             }
-        #elif defined(GAMEBOY) || defined(ANALOGUEPOCKET)
+        #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
             if (platform_keyboard_poll()) {
 
                 // Prevent passing through any key press by flagging the press
