@@ -125,6 +125,7 @@ SFXDIR         = $(SRCDIR)/sfx
 LANGDIR        = $(SRCDIR)/lang_$(LANG_CODE)
 CART_TYPE_DIR  = $(SRCDIR)/cart_$(CART_TYPE)
 SGBDIR         = $(SRCDIR)/sgb
+GAMEBOYDIR     = $(SRCDIR)/gameboy
 MEGADUCK_LAPTOP = $(SRCDIR)/megaduck_laptop
 
 
@@ -139,11 +140,13 @@ CSOURCES      = $(foreach dir,$(SRCDIR),$(notdir $(wildcard $(dir)/*.c)))
 CSOURCES      += $(foreach dir,$(RESDIR),$(notdir $(wildcard $(dir)/*.c)))
 CSOURCES      += $(foreach dir,$(SFXDIR),$(notdir $(wildcard $(dir)/*.c)))
 
-# Super Game Boy (border) support only for GB/AP targets, save ROM space otherwise
+# Super Game Boy (border) and usb keyboard support only for GB/AP targets, save ROM space otherwise
 ifeq ($(PLAT),gb)
 	CSOURCES  += $(foreach dir,$(SGBDIR),$(notdir $(wildcard $(dir)/*.c)))
+	CSOURCES  += $(foreach dir,$(GAMEBOYDIR),$(notdir $(wildcard $(dir)/*.c)))
 else ifeq ($(PLAT),ap)
 	CSOURCES  += $(foreach dir,$(SGBDIR),$(notdir $(wildcard $(dir)/*.c)))
+	CSOURCES  += $(foreach dir,$(GAMEBOYDIR),$(notdir $(wildcard $(dir)/*.c)))
 endif
 
 # Extra sources when building MegaDuck laptop
@@ -186,6 +189,10 @@ $(OBJDIR)/%.o:	$(SFXDIR)/%.c
 
 # Compile .c files in "src/sgb/" to .o object files
 $(OBJDIR)/%.o:	$(SGBDIR)/%.c
+	$(LCC) $(CFLAGS) -c -o $@ $<
+
+# Compile .c files in "src/gameboy/" to .o object files
+$(OBJDIR)/%.o:	$(GAMEBOYDIR)/%.c
 	$(LCC) $(CFLAGS) -c -o $@ $<
 
 # Compile .c files in "src/megaduck_laptop/" to .o object files

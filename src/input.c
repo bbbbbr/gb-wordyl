@@ -93,7 +93,7 @@ uint8_t key_repeat_count = 0x00;
             vsync();
 
             keyboard_pressed = (key_pressed != NO_KEY);
-            if (platform_keyboard_poll()) {
+            if (usb_keyboard_poll()) {
                 keyboard_pressed = (key_pressed != NO_KEY);
             }
         } while (KEY_PRESSED(button_mask) || keyboard_pressed);
@@ -102,7 +102,7 @@ uint8_t key_repeat_count = 0x00;
 
     static bool waitpadticked_lowcpu_usb_keyboard(bool * p_keyboard_checked) {
 
-        if (platform_keyboard_poll()) {
+        if (usb_keyboard_poll()) {
             // Prevent passing through any key press by flagging the press
             // and then returning once a new keyboard key is pressed.
             if (*p_keyboard_checked) {

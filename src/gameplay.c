@@ -290,7 +290,7 @@ static void handle_keyboard(void) {
                 {
                     duck_io_process_key_data(&keydata, megaduck_model);
         #else // Implied: if (defined(GAMEBOY) || defined(ANALOGUEPOCKET))
-            if (platform_keyboard_poll()) {
+            if (usb_keyboard_poll()) {
                 { // Extra brace for compat with duck version brace count
         #endif
 

@@ -7,7 +7,7 @@
     #include <duck/laptop_io.h>
     #include "megaduck_laptop/megaduck_keyboard.h"
 #elif (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
-    #include "platform_keyboard.h"
+    #include "gameboy/usb_keyboard.h"
 #endif
 
 #define J_ANY_KEY           0xFFu

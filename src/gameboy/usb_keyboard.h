@@ -1,5 +1,5 @@
-#ifndef PLATFORM_KEYBOARD_H
-#define PLATFORM_KEYBOARD_H
+#ifndef USB_KEYBOARD_H
+#define USB_KEYBOARD_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -21,14 +21,10 @@
 #define KEY_ESCAPE      27u
 #define KEY_DELETE      127u
 
-extern uint8_t platform_key_pressed;
-extern uint8_t platform_key_previous;
+extern uint8_t key_pressed;
+extern uint8_t key_previous;
 
-#define key_pressed  platform_key_pressed
-#define key_previous platform_key_previous
+bool usb_keyboard_init(void);
+bool usb_keyboard_poll(void);
 
-bool platform_keyboard_init(void);
-bool platform_keyboard_poll(void);
-void platform_keyboard_printscreen(void);
-
-#endif // PLATFORM_KEYBOARD_H
+#endif // USB_KEYBOARD_H

@@ -2,14 +2,14 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "platform_keyboard.h"
+#include "usb_keyboard.h"
 
-#if !defined(MEGADUCK)
+// For use with Inside Gadgets USB HID keyboard to link port adapter
 
-#if (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
+#if !defined(CART_31k_1kflash)
 
-uint8_t platform_key_pressed = NO_KEY;
-uint8_t platform_key_previous = NO_KEY;
+uint8_t key_pressed = NO_KEY;
+uint8_t key_previous = NO_KEY;
 
 #define SERIAL_TRANSFER_TIMEOUT        0x0800u
 #define REPEAT_OFF                     0u
@@ -71,10 +71,10 @@ static uint8_t insidegadgets_translate_key(uint8_t raw_key) {
 
 static void insidegadgets_process_key(uint8_t key_value) {
 
-    platform_key_previous = platform_key_pressed;
+    key_previous = key_pressed;
 
     if (!key_value) {
-        platform_key_pressed = NO_KEY;
+        key_pressed = NO_KEY;
         key_repeat_timeout = REPEAT_OFF;
         key_repeat_previous = NO_KEY;
         return;
@@ -82,27 +82,27 @@ static void insidegadgets_process_key(uint8_t key_value) {
 
     if (key_value == key_repeat_previous) {
 
-        platform_key_pressed = NO_KEY;
+        key_pressed = NO_KEY;
 
         if (key_repeat_timeout)
             key_repeat_timeout--;
         else {
-            platform_key_pressed = key_repeat_previous;
+            key_pressed = key_repeat_previous;
             key_repeat_timeout = REPEAT_CONTINUE_THRESHOLD;
         }
     }
     else {
-        platform_key_pressed = key_value;
+        key_pressed = key_value;
         key_repeat_previous = key_value;
         key_repeat_timeout = REPEAT_FIRST_THRESHOLD;
     }
 }
 
 
-bool platform_keyboard_init(void) {
+bool usb_keyboard_init(void) {
 
-    platform_key_pressed = NO_KEY;
-    platform_key_previous = NO_KEY;
+    key_pressed = NO_KEY;
+    key_previous = NO_KEY;
     key_repeat_timeout = REPEAT_OFF;
     key_repeat_previous = NO_KEY;
 
@@ -110,7 +110,7 @@ bool platform_keyboard_init(void) {
 }
 
 
-bool platform_keyboard_poll(void) {
+bool usb_keyboard_poll(void) {
 
     uint8_t raw_key = insidegadgets_serial_exchange();
     uint8_t key_value = insidegadgets_translate_key(raw_key);
@@ -120,32 +120,4 @@ bool platform_keyboard_poll(void) {
 }
 
 
-void platform_keyboard_printscreen(void) {
-}
-
-#elif !defined(MEGADUCK)
-
-uint8_t platform_key_pressed = NO_KEY;
-uint8_t platform_key_previous = NO_KEY;
-
-bool platform_keyboard_init(void) {
-
-    platform_key_pressed = NO_KEY;
-    platform_key_previous = NO_KEY;
-    return false;
-}
-
-
-bool platform_keyboard_poll(void) {
-
-    return false;
-}
-
-
-void platform_keyboard_printscreen(void) {
-}
-
-
-#endif // (defined(GAMEBOY) || defined(ANALOGUEPOCKET)) && !defined(CART_31k_1kflash)
-
-#endif // !defined(MEGADUCK)
+#endif // !defined(CART_31k_1kflash)
