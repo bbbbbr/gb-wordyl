@@ -38,7 +38,9 @@ static uint8_t insidegadgets_serial_exchange(void) {
     return SB_REG;
 }
 
-
+// Keys on the IG usb keyboard adapter take the USB HID key and add 93.
+// So to look up a key subtract 93 and check the (hex) chart here:
+// https://usb.org/sites/default/files/hut1_21.pdf#chapter.10
 static uint8_t insidegadgets_translate_key(uint8_t raw_key) {
 
     if (((raw_key >= 'a') && (raw_key <= 'z')) ||
@@ -58,7 +60,8 @@ static uint8_t insidegadgets_translate_key(uint8_t raw_key) {
         case 174u: return KEY_ARROW_DOWN;
         case 143u:
         case 175u: return KEY_ARROW_UP;
-        case 151u: return KEY_HELP;
+        case 194u:                        // Dedicated Menu key (right side, by ctrl, etc)
+        case 151u: return KEY_HELP;       // F1 Key
         case 163u: return KEY_PRINTSCREEN;
         case 169u: return KEY_DELETE;
         default:   return NO_KEY;
