@@ -40,7 +40,7 @@ Downloads and online playable version are at: https://bbbbbr.itch.io/gb-wordyl
     - Deutsch (DE), English (EN), Español (ES), Français (FR), Italiano (IT), Nederlands (NL), Latin (LA), Português Brasileiro (PT-BR), Cornish (KW), català (CA)
     - No words with special chars, just English A-Z letters
     - Translated UI text for Deutsch (DE), English (EN), Español (ES), Français (FR), Nederlands (NL), Português Brasileiro (PT-BR), Cornish (KW), català (CA)
-    - Inside Gadgets USB Keyboard link adapter Support (Game Boy)
+    - Inside Gadgets USB Keyboard link adapter Support, supported on MiSTer (Game Boy)
 
 ### Controls:
   - A: Add Letter
