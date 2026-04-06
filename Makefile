@@ -290,16 +290,16 @@ romusage:
 
 package:
 	mkdir -p "../Build Archive/$(VERSION)"
-	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_32k_nosave.zip"       LICENSE.txt Manual.md README.md build/duck/32k_nosave/*.duck
-	# zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_31k_1kflash.zip"      LICENSE.txt Manual.md README.md build/duck/31k_1kflash/*.duck
-	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_md0_sram.zip"         LICENSE.txt Manual.md README.md build/duck/md0_sram/*.md0
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_32k_nosave.zip"       Changelog.md LICENSE.txt Manual.md README.md build/duck/32k_nosave/*.duck
+	# zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_31k_1kflash.zip"      Changelog.md LICENSE.txt Manual.md README.md build/duck/31k_1kflash/*.duck
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_MegaDuck_md0_sram.zip"         Changelog.md LICENSE.txt Manual.md README.md build/duck/md0_sram/*.md0
 	#
-	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_32k_nosave.zip"        LICENSE.txt Manual.md README.md build/gb/32k_nosave/*.gb
-	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_31k_1kflash.zip"       LICENSE.txt Manual.md README.md build/gb/31k_1kflash/*.gb
-	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_mbc5.zip"              LICENSE.txt Manual.md README.md build/gb/mbc5/*.gb
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_32k_nosave.zip"        Changelog.md LICENSE.txt Manual.md README.md build/gb/32k_nosave/*.gb
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_31k_1kflash.zip"       Changelog.md LICENSE.txt Manual.md README.md build/gb/31k_1kflash/*.gb
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_GameBoy_mbc5.zip"              Changelog.md LICENSE.txt Manual.md README.md build/gb/mbc5/*.gb
 	#
-	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_AnaloguePocket_32k_nosave.zip" LICENSE.txt Manual.md README.md build/pocket/32k_nosave/*.pocket
-	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_AnaloguePocket_mbc5.zip"       LICENSE.txt Manual.md README.md build/pocket/mbc5/*.pocket
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_AnaloguePocket_32k_nosave.zip" Changelog.md LICENSE.txt Manual.md README.md build/pocket/32k_nosave/*.pocket
+	zip -j -9 "../Build Archive/$(VERSION)/gb-wordyl_$(VERSION)_AnaloguePocket_mbc5.zip"       Changelog.md LICENSE.txt Manual.md README.md build/pocket/mbc5/*.pocket
 
 clean:
 	@echo Cleaning
