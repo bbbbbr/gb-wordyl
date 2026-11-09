@@ -68,7 +68,7 @@ _flash_data_routine:
         .wb     #_flash_sector_address, #0xF0   ; reset
 
         xor     a
-        ldh     (.IF), a                        ; cancel pending interrupts
+        ldh     (.IFL), a                        ; cancel pending interrupts
         ei 
 
         ret
@@ -149,7 +149,7 @@ _erase_flash_sector_routine:
         ld      e, #1                           ; success
 3$:
         xor     a
-        ldh     (.IF), a                        ; cancel pending interrupts
+        ldh     (.IFL), a                        ; cancel pending interrupts
         ei
 
         ret
