@@ -60,7 +60,7 @@ void print_str(const char * txt) {
 
     uint8_t src_chr;
     uint8_t letter;
-    uint8_t line_wrap_x_addr = (((uint8_t)print_vram_addr) & 0x1Fu);// (uint8_t)((uint16_t)print_vram_addr & 0x001Fu);    
+    uint8_t line_wrap_x_addr = (uint8_t)((uint16_t)print_vram_addr & 0x1Fu);// (uint8_t)((uint16_t)print_vram_addr & 0x001Fu);    
 
     // src_chr = *txt++; // Next character
     // while(src_chr) {

@@ -56,7 +56,7 @@ void keyboard_reset(void) {
 
 
 // return currently selected letter in keyboard
-inline char keyboard_get_letter(void) {
+char keyboard_get_letter(void) {
 
     return kb[kb_y][kb_x];
 }

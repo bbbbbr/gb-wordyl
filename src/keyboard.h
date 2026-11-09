@@ -16,11 +16,10 @@ extern int8_t kb_y;
 
 void keyboard_reset(void);
 
-inline char keyboard_get_letter(void);
+char keyboard_get_letter(void);
 
 void keyboard_fill_letter_cgb_pal(uint8_t row, uint8_t col, uint8_t palnum);
 void keyboard_set_color_for_letter(uint8_t row, uint8_t col, uint8_t match_type, uint8_t tile_id);
-inline void keyboard_set_default_color_letter(uint8_t row, uint8_t col);
 
 void keyboard_update_from_guess(void);
 void keyboard_redraw_clean(void);
